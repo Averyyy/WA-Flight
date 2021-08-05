@@ -6,16 +6,24 @@ from flask import Flask, render_template, request, session, redirect, url_for
 import Query_Utility as query
 import pprint
 
-
+print('hi')
 app = Flask(__name__)
 app.secret_key = "NK3K"
-conn = pymysql.connect(host= '127.0.0.1',
-                       user='Wendy',
-                       password = '12345',
-                       port = 3307,
-                       db='Project',
+# conn = pymysql.connect(host= '127.0.0.1',
+#                        user='Wendy',
+#                        password = '12345',
+#                        # port = 3307,
+#                        db='Project',
+#                        charset='utf8mb4',
+#                        cursorclass=pymysql.cursors.DictCursor)
+conn = pymysql.connect(host= 'localhost',
+                       user='root',
+                       password = '',
+                       port = 3306,
+                       db='wendy\'s',
                        charset='utf8mb4',
-                       cursorclass=pymysql.cursors.DictCursor)
+                       cursorclass=pymysql.cursors.DictCursor
+                       )
 
 @app.route('/', methods = ["GET","POST"])
 def public_view():
@@ -35,4 +43,4 @@ def sign_in():
     pass
 
 if __name__ =='__main__':
-    app.run()
+    app.run('127.0.0.1', 5000, debug = True)
