@@ -3,12 +3,16 @@
 </style>
 *{
   font-family: 'Lato', sans-serif;
-  background-color:
+/* background-image: linear-gradient(to top, #feada6 0%, #f5efef 100%); */
+
+
 }
 
 body {
 /* background-image: linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%); */
-background-color: white;
+background-image: linear-gradient(to top, #5ee7df 0%, #b490ca 100%);
+background-size:cover;
+background-attachment:fixed;
 }
 
 #header{
@@ -30,17 +34,30 @@ font-weight: 400;
 
   text-align: right;
 }
-#search{
-position:
-
+#search {
+position: absolute;
+left: 40%;
+top: 100pt;
 }
+.table{
+  position: absolute;
+  top: 400pt;
+}
+
+
+
 .container * {
+  display: block;
+  position: absolute;
+  top: 10%;
+  left: 15%;
   margin: 20px 0;
+
 }
 .container .line-text {
   position: relative;
   display: inline-block;
-  font-size: 110px;
+  font-size: 70px;
   font-weight: 800;
   text-transform: uppercase;
   font-style: italic;
@@ -52,7 +69,7 @@ position:
 }
 .container .stripe-text {
   position: relative;
-  font-size: 110px;
+  font-size: 70px;
   text-transform: uppercase;
   font-weight: 900;
   font-family: "Catamaran", sans-serif;
