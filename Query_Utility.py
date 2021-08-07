@@ -4,7 +4,12 @@ import datetime
 import time
 from flask import Flask, render_template, request, session, redirect, url_for
 import pprint
-# =================================
+from werkzeug.security import generate_password_hash, check_password_hash
+
+PASSWORD_HASH = 'md5'
+# ===========================================================================================
+#public view
+
 dic_airport_city = {"PVG":"Shanghai",
                     "PEK":"Beijing",
                     "CAN":"Guangzhou",
@@ -70,7 +75,6 @@ def get_departure_time():
     d_dic['arrival_time'] = remove_duplicate(d_dic['CHANGE'])
 
 
-
 def public_view(conn):
     # From query fetch all
     cursor=conn.cursor()
@@ -117,3 +121,30 @@ def reg_validation_cus(conn,info):
 
 def reg_validation_cus(conn,info):
     return status, err
+#=======
+# ===========================================================================================
+#sign in
+
+def login_check(conn, username, password, identity):
+    cursor = conn.cursor(prepared=True)
+    query = """SELECT password FROM %s WHERE """ % identity
+    if identity == "airline_staff":
+        query += """username = %s"""
+    else:
+        query += """email = %s"""
+    cursor.execute(query, (username.replace("\'", "\'\'"),))
+    data = cursor.fetchall()
+    cursor.close()
+    if not data:
+        return False
+    return check_password_hash(data[0][0], password)
+
+
+def airline_staff_initialization(conn, email):
+    cursor = conn.cursor(prepared=True)
+    query = """SELECT airline_name FROM airline_staff WHERE username = %s"""
+    cursor.execute(query, (email,))
+    data = cursor.fetchall()
+    cursor.close()
+    return data[0][0]
+

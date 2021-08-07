@@ -1,0 +1,95 @@
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital@0;1&display=swap');
+</style>
+*{
+  font-family: 'Lato', sans-serif;
+/* background-image: linear-gradient(to top, #feada6 0%, #f5efef 100%); */
+
+
+}
+
+body {
+/* background-image: linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%); */
+background-image: linear-gradient(to top, #5ee7df 0%, #b490ca 100%);
+background-size:cover;
+background-attachment:fixed;
+}
+
+#header{
+/* background-image: linear-gradient(to right, #eea2a2 0%, #bbc1bf 19%, #57c6e1 42%, #b49fda 79%, #7ac5d8 100%); */
+/* background-image: linear-gradient(to top, #9795f0 0%, #fbc8d4 100%); */
+/* box-shadow: 0 0 5px 10px #555; */
+background-image: linear-gradient(to top, #fff1eb 0%, #ace0f9 100%);
+color : linear-gradient(to right, #eea2a2 0%, #bbc1bf 19%, #57c6e1 42%, #b49fda 79%, #7ac5d8 100%);
+text-align: center;
+/* font-size: 10pt; */
+position: relative;
+font-weight: 400;
+
+}
+#sign{
+  position: absolute;
+  right: 50px;
+  top: 5px;
+
+  text-align: right;
+}
+#search {
+position: absolute;
+left: 40%;
+top: 100pt;
+}
+.table{
+  position: absolute;
+  top: 400pt;
+}
+
+.container * {
+  display: block;
+  position: absolute;
+  top: 10%;
+  left: 15%;
+  margin: 20px 0;
+
+}
+.container .line-text {
+  position: relative;
+  display: inline-block;
+  font-size: 70px;
+  font-weight: 800;
+  text-transform: uppercase;
+  font-style: italic;
+  color: transparent;
+  -webkit-text-stroke-width: 5.5px;
+  -webkit-text-stroke-color: white;
+  white-space: nowrap;
+  text-shadow: 12px 15px #39dbc2, 13px 16px #f41fbf, 14px 17px #f41fbf, 15px 18px #f41fbf, 16px 19px #f41fbf, 17px 20px #f41fbf, 18px 21px #f41fbf, 19px 22px #f41fbf, 20px 23px #f41fbf, 21px 24px #f41fbf, 22px 25px #f41fbf, 23px 26px #f41fbf, 24px 27px #f41fbf, 25px 28px #f41fbf;
+}
+.container .stripe-text {
+  position: relative;
+  font-size: 70px;
+  text-transform: uppercase;
+  font-weight: 900;
+  font-family: "Catamaran", sans-serif;
+  font-style: italic;
+}
+.container .stripe-text:after {
+  position: absolute;
+  left: 0;
+  content: "Find Flight Deals";
+  background: -webkit-repeating-linear-gradient(135deg, #f41fbf, #f41fbf 20px, #ffed28 20px, #ffed28 40px, #b028ff 40px, #b028ff 60px, #39dbc2 60px, #39dbc2 80px);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-stroke-width: 5.5px;
+  -webkit-text-stroke-color: white;
+}
+.container .stripe-text:before {
+  z-index: -1;
+  position: absolute;
+  content: "Find Flight Deals";
+  color: #f41fbf;
+  top: 0px;
+  left: 0px;
+  text-shadow: 5px 0px #f41fbf, 6px 1px #f41fbf, 7px 2px #f41fbf, 8px 3px #f41fbf, 9px 4px #f41fbf, 10px 5px #f41fbf, 11px 6px #f41fbf, 12px 7px #f41fbf, 13px 8px #f41fbf, 14px 9px #f41fbf, 15px 10px #f41fbf;
+}
