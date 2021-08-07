@@ -4,15 +4,12 @@ import datetime
 import time
 from flask import Flask, render_template, request, session, redirect, url_for
 import pprint
-<<<<<<< HEAD
 from werkzeug.security import generate_password_hash, check_password_hash
 
 PASSWORD_HASH = 'md5'
 # ===========================================================================================
 #public view
-=======
-# =================================
->>>>>>> Wendy
+
 dic_airport_city = {"PVG":"Shanghai",
                     "PEK":"Beijing",
                     "CAN":"Guangzhou",
@@ -63,19 +60,19 @@ def get_locations(conn):
 
 # the options for searching filter
 # NOT IN USE
-def get_departure_time():
-    d_dic = {
-        'departure_time': [],
-        'arrival_time': []
-    }
-
-    for i in range(len(data)):
-        d_dic['departure_time'].append(str(data[i]['departure_time']))
-        d_dic['arrival_time'].append(str(data[i]['arrival_time']))
-
-    # get rid of all the duplicate elements
-    d_dic['departure_time'] = remove_duplicate(d_dic['CHANGE'])
-    d_dic['arrival_time'] = remove_duplicate(d_dic['CHANGE'])
+# def get_departure_time():
+#     d_dic = {
+#         'departure_time': [],
+#         'arrival_time': []
+#     }
+#
+#     for i in range(len(data)):
+#         d_dic['departure_time'].append(str(data[i]['departure_time']))
+#         d_dic['arrival_time'].append(str(data[i]['arrival_time']))
+#
+#     # get rid of all the duplicate elements
+#     d_dic['departure_time'] = remove_duplicate(d_dic['CHANGE'])
+#     d_dic['arrival_time'] = remove_duplicate(d_dic['CHANGE'])
 
 
 
@@ -115,7 +112,7 @@ def filter_result(conn,html_get):
         i['Arrival']= "%s | %s" % (airport_city(i['arrival_name']),i['arrival_name'])
     return data
 
-<<<<<<< HEAD
+
 # ===========================================================================================
 #sign in
 
@@ -134,7 +131,7 @@ def login_check(conn, username, password, role):
     return check_password_hash(data[0][0], password)
 
 
-<<<<<<< HEAD
+
 def airline_staff_initialization(conn, email):
     cursor = conn.cursor(prepared=True)
     query = """SELECT airline_name FROM airline_staff WHERE username = %s"""
@@ -142,17 +139,15 @@ def airline_staff_initialization(conn, email):
     data = cursor.fetchall()
     cursor.close()
     return data[0][0]
-=======
-def reg_validation_cus(conn,info):
 
-    return status, err
+# def reg_validation_cus(conn,info):
+#
+#     return status, err
+#
+# def reg_validation_cus(conn,info):
+#
+#     return valid, err
+#
+# def reg_validation_cus(conn,info):
+#     return status, err
 
-def reg_validation_cus(conn,info):
-
-    return valid, err
-
-def reg_validation_cus(conn,info):
-    return status, err
->>>>>>> Wendy
-=======
->>>>>>> 379f565d8f1708c8e1356a70465bdcc13ba8ecac
