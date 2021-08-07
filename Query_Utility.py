@@ -119,10 +119,10 @@ def filter_result(conn,html_get):
 # ===========================================================================================
 #sign in
 
-def login_check(conn, username, password, identity):
+def login_check(conn, username, password, role):
     cursor = conn.cursor(prepared=True)
-    query = """SELECT password FROM %s WHERE """ % identity
-    if identity == "airline_staff":
+    query = """SELECT password FROM %s WHERE """ % role
+    if role == "airline_staff":
         query += """username = %s"""
     else:
         query += """email = %s"""
@@ -134,6 +134,7 @@ def login_check(conn, username, password, identity):
     return check_password_hash(data[0][0], password)
 
 
+<<<<<<< HEAD
 def airline_staff_initialization(conn, email):
     cursor = conn.cursor(prepared=True)
     query = """SELECT airline_name FROM airline_staff WHERE username = %s"""
@@ -153,3 +154,5 @@ def reg_validation_cus(conn,info):
 def reg_validation_cus(conn,info):
     return status, err
 >>>>>>> Wendy
+=======
+>>>>>>> 379f565d8f1708c8e1356a70465bdcc13ba8ecac
