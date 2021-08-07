@@ -113,10 +113,10 @@ def filter_result(conn,html_get):
 # ===========================================================================================
 #sign in
 
-def login_check(conn, username, password, identity):
+def login_check(conn, username, password, role):
     cursor = conn.cursor(prepared=True)
-    query = """SELECT password FROM %s WHERE """ % identity
-    if identity == "airline_staff":
+    query = """SELECT password FROM %s WHERE """ % role
+    if role == "airline_staff":
         query += """username = %s"""
     else:
         query += """email = %s"""
@@ -128,10 +128,3 @@ def login_check(conn, username, password, identity):
     return check_password_hash(data[0][0], password)
 
 
-def airline_staff_initialization(conn, email):
-    cursor = conn.cursor(prepared=True)
-    query = """SELECT airline_name FROM airline_staff WHERE username = %s"""
-    cursor.execute(query, (email,))
-    data = cursor.fetchall()
-    cursor.close()
-    return data[0][0]
