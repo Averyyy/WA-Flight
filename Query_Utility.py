@@ -19,6 +19,57 @@ def airport_city(airport):
 def remove_duplicate(lis):
     return list(set(lis))
 # =================================
+# the options for searching filter
+def get_locations(conn):
+    # Fetch all the data
+    cursor = conn.cursor()
+    query = "select * from flight"
+    cursor.execute(query)
+    data = cursor.fetchall()
+    cursor.close()
+
+    d_dic = {
+        'departure_airport': [],
+        'arrival_airport': [],
+        'departure_loc':[],
+        'arrival_loc':[]
+    }
+
+    for i in range(len(data)):
+        d_dic['departure_airport'].append(str(data[i]['departure_name']))
+        d_dic['arrival_airport'].append(str(data[i]['arrival_name']))
+
+    # get rid of all the duplicate elements
+    d_dic['departure_airport'] = remove_duplicate(d_dic['departure_airport'])
+    d_dic['arrival_airport'] = remove_duplicate(d_dic['arrival_airport'])
+
+    # mapping back the airport to the city
+    for i in d_dic['departure_airport']:
+        d_dic['departure_loc'].append("%s | %s" % (airport_city(i), i))
+
+    for i in d_dic['arrival_airport']:
+        d_dic['arrival_loc'].append("%s | %s" % (airport_city(i), i))
+    print('/////////',d_dic)
+
+    return d_dic
+
+# the options for searching filter
+# NOT IN USE
+def get_departure_time():
+    d_dic = {
+        'departure_time': [],
+        'arrival_time': []
+    }
+
+    for i in range(len(data)):
+        d_dic['departure_time'].append(str(data[i]['departure_time']))
+        d_dic['arrival_time'].append(str(data[i]['arrival_time']))
+
+    # get rid of all the duplicate elements
+    d_dic['departure_time'] = remove_duplicate(d_dic['CHANGE'])
+    d_dic['arrival_time'] = remove_duplicate(d_dic['CHANGE'])
+
+
 
 def public_view(conn):
     # From query fetch all
@@ -28,40 +79,31 @@ def public_view(conn):
     data = cursor.fetchall()
     cursor.close()
 
-    d_dic = {
-             'airline':[],
-             'departure_city': [],
-             'departure_airport':[],
-             'arrival_city': [],
-             'arrival_airport': [],
-             'price':[]
-             }
-
-    for i in range(len(data)):
-        d_dic['airline'].append(data[i]['airline_name'])
-        d_dic['departure_airport'].append(str(data[i]['departure_name']))
-        d_dic['arrival_airport'].append(str(data[i]['arrival_name']))
-        d_dic['price'].append(str(data[i]['price']))
-
-    # get rid of all the duplicate elements
-    d_dic['airline'] = remove_duplicate(d_dic['airline'])
-    d_dic['departure_airport'] = remove_duplicate(d_dic['departure_airport'])
-    d_dic['arrival_airport'] = remove_duplicate(d_dic['arrival_airport'])
-    d_dic['price'] = remove_duplicate(d_dic['price'])
-
-    # mapping back the airport to the city
-    for i in d_dic['departure_airport']:
-        d_dic['departure_city'].append("%s | %s" % (airport_city(i),i))
-    for i in d_dic['arrival_airport']:
-        d_dic['arrival_city'].append("%s | %s" % (airport_city(i),i))
-
     for i in data:
-        print(i)
-        print(i,i['departure_name'])
         i['Departure']= "%s | %s" % (airport_city(i['departure_name']),i['departure_name'])
         i['Arrival']= "%s | %s" % (airport_city(i['arrival_name']),i['arrival_name'])
+    return data
 
+def filter_result(conn,html_get):
+    # html_get is a list from user filter input, it can have multiple results or it can be empty
+    # in the Flask html_get = {'from':request.form['from'],
+    #                     'to':request.form['to'],
+    #                     'dt':request.form['departure']} -- Shanghai | PVG
+    query = "select * from flight where"
+    if html_get['from']:
+        html_get['departure_name'] = html_get['from'].split('|')[1].strip()
+        query += ' %s = \'%s\' '% ('departure_name', html_get['departure_name'])
+    if html_get['to']:
+        html_get['arrival_name'] = html_get['to'].split('|')[1].strip()
+        query += 'and %s =\'%s\' ' % ('arrival_name', html_get['arrival_name'])
+    if html_get['dt'] != '':
+        query += 'and %s = \'%s\'' % ('dt', html_get['dt'])
+    cursor = conn.cursor()
+    cursor.execute(query)
+    data = cursor.fetchall()
+    cursor.close()
+    for i in data:
+        i['Departure']= "%s | %s" % (airport_city(i['departure_name']),i['departure_name'])
+        i['Arrival']= "%s | %s" % (airport_city(i['arrival_name']),i['arrival_name'])
+    return data
 
-    pprint.pprint(d_dic)
-    pprint.pprint(data)
-    return d_dic, data
