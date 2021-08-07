@@ -4,11 +4,15 @@ import datetime
 import time
 from flask import Flask, render_template, request, session, redirect, url_for
 import pprint
+<<<<<<< HEAD
 from werkzeug.security import generate_password_hash, check_password_hash
 
 PASSWORD_HASH = 'md5'
 # ===========================================================================================
 #public view
+=======
+# =================================
+>>>>>>> Wendy
 dic_airport_city = {"PVG":"Shanghai",
                     "PEK":"Beijing",
                     "CAN":"Guangzhou",
@@ -74,6 +78,7 @@ def get_departure_time():
     d_dic['arrival_time'] = remove_duplicate(d_dic['CHANGE'])
 
 
+
 def public_view(conn):
     # From query fetch all
     cursor=conn.cursor()
@@ -110,6 +115,7 @@ def filter_result(conn,html_get):
         i['Arrival']= "%s | %s" % (airport_city(i['arrival_name']),i['arrival_name'])
     return data
 
+<<<<<<< HEAD
 # ===========================================================================================
 #sign in
 
@@ -135,3 +141,15 @@ def airline_staff_initialization(conn, email):
     data = cursor.fetchall()
     cursor.close()
     return data[0][0]
+=======
+def reg_validation_cus(conn,info):
+
+    return status, err
+
+def reg_validation_cus(conn,info):
+
+    return valid, err
+
+def reg_validation_cus(conn,info):
+    return status, err
+>>>>>>> Wendy

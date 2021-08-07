@@ -1,0 +1,183 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {font-family: Arial;}
+
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+</style>
+</head>
+<body>
+
+<h2>Sign up</h2>
+<p>Welcome!</p>
+
+<div class="tab">
+  <button class="tablinks" onclick="openCity(event, 'London')">Customer</button>
+  <button class="tablinks" onclick="openCity(event, 'Paris')">Booking Agent</button>
+  <button class="tablinks" onclick="openCity(event, 'Tokyo')">Airline Staff</button>
+</div>
+
+<div id="London" class="tabcontent">
+
+  <form action="/action_page.php" method="post">
+
+  <div class="container">
+    <label for="uname"><b>Email</b></label>
+    <input type="text"  name="Email" required>
+
+    <label for="text"><b>Preferred name</b></label>
+    <input type="text"  name="pre name" required>
+
+    <label for="psw"><b>Password</b></label>
+    <input type="password" name="psw" required>
+
+    <label for="text"><b>Building number</b></label>
+    <input type="text"  name="bui num" required>
+
+    <label for="text"><b>Street</b></label>
+    <input type="text"  name="street" required>
+
+    <label for="text"><b>City</b></label>
+    <input type="text"  name="city" required>
+
+    <label for="text"><b>State</b></label>
+    <input type="text"  name="state" required>
+
+    <label for="text"><b>Phone number</b></label>
+    <input type="text"  name="pho num" required>
+
+    <label for="text"><b>Passport number</b></label>
+    <input type="text"  name="psp num" required>
+
+    <label for="date"><b>Passport expiration date</b></label>
+    <input type="date"  name="psp exp" required>
+
+    <label for="text"><b>Passport country</b></label>
+    <input type="text"  name="psp cou" required>
+
+    <label for="date"><b>Date of Birth</b></label>
+    <input type="date"  name="DoB" required>
+
+    <button type="submit">Login</button>
+    <label>
+      <input type="checkbox" checked="checked" name="remember"> Remember me
+    </label>
+  </div>
+  </form>
+
+</div>
+
+<div id="Paris" class="tabcontent">
+
+<form action="/action_page.php" method="post">
+    <div class="container">
+      <label for="email"><b>Username</b></label>
+      <input type="text" name="ba_email" required>
+
+      <label for="psw"><b>Password</b></label>
+      <input type="password"  name="ba_psw" required>
+
+      <label for="text"><b>Booking agent ID</b></label>
+      <input type="text" name="ba_id" required>
+
+      <button type="submit">Login</button>
+      <label>
+        <input type="checkbox" checked="checked" name="remember"> Remember me
+      </label>
+    </div>
+<form>
+</div>
+
+<div id="Tokyo" class="tabcontent">
+<form action="/action_page.php" method="post">
+
+    <br class="container">
+      <label for="uname"><b>Username</b></label>
+      <input type="text" name="uname" required>
+
+      <label for="psw"><b>Password</b></label>
+      <input type="password" name="psw" required>
+
+      <label for="first name"><b>First name</b></label>
+      <input type="text"  name="uname" required>
+
+      <label for="last name"><b>last name</b></label>
+      <input type="text" name="uname" required>
+
+      <b>Air Line</b>
+      <input type="text" name="to" list='list1' placeholder="Select">
+      <datalist id="list1">
+          {% for i in airline %}
+              <option>{{ i }}</option>
+          {% endfor %}
+      </datalist>
+
+
+
+      <br>Date of Birth:<br>
+      <input class="Date_input" type="date" name = "date" id="all_date">
+
+      <button type="submit">Login</button>
+      <label>
+        <input type="checkbox" checked="checked" name="remember"> Remember me
+      </label>
+    </div>
+</div>
+
+
+<script>
+function openCity(evt, cityName) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  document.getElementById(cityName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+</script>
+
+</body>
+</html>
