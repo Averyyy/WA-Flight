@@ -219,27 +219,7 @@ def staff_home():
 #             session["airline"] = info["airline_name"]
 #         return redirect(url_for("search_flight"))
 
-@app.route('/register/booking_agent', methods=['GET', 'POST'])
-def signup_ba(identity):
-    info = {
-        "email": request.form.get("username"),
-        "password": request.form.get("password"),
-        "name": request.form.get("name"),
-    }
-    
 
-
-@app.route('/register/airline_staff', methods=['GET', 'POST'])
-def signup_as(identity):
-
-    info = {
-        "email": request.form.get("username"),
-        "password": request.form.get("password"),
-        "first_name": request.form.get("first_name"),
-        "last_name": request.form.get("last_name"),
-        "date_of_birth": request.form.get("DoB"),
-        "airline_name": request.form.get("airline_name")
-    }
 
 
 
