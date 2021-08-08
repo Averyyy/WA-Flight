@@ -2,82 +2,42 @@
 <html>
 
 <head>
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-	<link rel="stylesheet" href="../static/index_view.css" />
-<header id='header'>
-	<nav class="navbar navbar-expand-lg navbar-light bg-light"  >
-  <div class="container-fluid" >
-    <a class="navbar-brand" href="#">WAFlight</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Admin</a>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            About us
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="#">Wendy</a></li>
-            <li><a class="dropdown-item" href="#">Avery action</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
-          </ul>
-        </li>
-        <!-- <li class="nav-item">
-          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-        </li> -->
-      </ul>
-      <form class="d-flex" >
-        <button class="btn btn-outline-success" type="submit" style="margin-right: 10pt; color = white;"
-				 onclick="window.location.href="{{ url_for("sign_in")}}"">Sign in</button>
-				<button class="btn btn-outline-success" type="submit" >Sign up</button>
-      </form>
-    </div>
-  </div>
-</nav>
-	<!-- <a>WAFlight Booking</a> -->
-</header>
-<!-- <div id='sign'>
-	<a href="{{ url_for("sign_up") }}">Sign up  </a>
-	<a href="{{ url_for("sign_in") }}">  Sign in</a>
-</div> -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<div id='header'>
+	<a>WAFlight Booking</a>
+</div>
+<div id='nav'>
+	<a href="{{ url_for("signup_ba") }}">Sign up</a>
+	<a href="{{ url_for("sign_in") }}">Sign in</a>
+</div>
 
 </head>
 
 <body>
-	<div class='container'>
-	<div class='stripe-text'>Find Flight Deals</div>
-	</div>
+
 	<div id='search'>
+		<br>Find flight deals<br>
 		<form action="/public_view" method="post">
 			<br><br><br><br><br>
-<!--			Where from:<br>-->
-			<input type="text" name="from" list="list1" placeholder="Departure" autocomplete="off">
-			<datalist id="list1">
-				{% for i in departure_city %}
-					<option>{{ i }}</option>
-				{% endfor %}
-			</datalist>
-			<br>
-<!--			To City:<br>-->
-			<input type="text" name="to" list='list2' placeholder="Arrival" autocomplete="off">
-			<datalist id="list2">
-				{% for i in arrival_city %}
-					<option>{{ i }}</option>
-				{% endfor %}
-			</datalist>
+				<input type="text" name="from" list="list1" placeholder="Departure" autocomplete="off">
+				   <datalist id="list1">
+					{% for i in departure_city %}
+					 <option>{{ i }}</option>
+					{% endfor %}
+				   </datalist>
+				   <br>
+				<!--   To City:<br>-->
+				   <input type="text" name="to" list='list2' placeholder="Arrival" autocomplete="off">
+				   <datalist id="list2">
+					{% for i in arrival_city %}
+					 <option>{{ i }}</option>
+					{% endfor %}
+				   </datalist>
 			<br>
 			Departure Time:<br>
 			<input class="Date_input" type="date" name = "date" id="all_date">
 			<br>
-			<input type="submit" value='Search'/>
+			<input type="submit" value='Search' formmethod="post">
 			</form>
 	</div>
 <table class="table">
@@ -113,7 +73,7 @@
 
   </tbody>
 </table>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
 
 </html>

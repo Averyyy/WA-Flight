@@ -4,15 +4,7 @@ import datetime
 import time
 from flask import Flask, render_template, request, session, redirect, url_for
 import pprint
-<<<<<<< HEAD
-from werkzeug.security import generate_password_hash, check_password_hash
-
-PASSWORD_HASH = 'md5'
-# ===========================================================================================
-#public view
-=======
 # =================================
->>>>>>> Wendy
 dic_airport_city = {"PVG":"Shanghai",
                     "PEK":"Beijing",
                     "CAN":"Guangzhou",
@@ -57,7 +49,6 @@ def get_locations(conn):
 
     for i in d_dic['arrival_airport']:
         d_dic['arrival_loc'].append("%s | %s" % (airport_city(i), i))
-    print('/////////',d_dic)
 
     return d_dic
 
@@ -115,44 +106,42 @@ def filter_result(conn,html_get):
         i['Arrival']= "%s | %s" % (airport_city(i['arrival_name']),i['arrival_name'])
     return data
 
-<<<<<<< HEAD
-# ===========================================================================================
-#sign in
-
-def login_check(conn, username, password, role):
-    cursor = conn.cursor(prepared=True)
-    query = """SELECT password FROM %s WHERE """ % role
-    if role == "airline_staff":
-        query += """username = %s"""
-    else:
-        query += """email = %s"""
-    cursor.execute(query, (username.replace("\'", "\'\'"),))
-    data = cursor.fetchall()
-    cursor.close()
-    if not data:
-        return False
-    return check_password_hash(data[0][0], password)
-
-
-<<<<<<< HEAD
-def airline_staff_initialization(conn, email):
-    cursor = conn.cursor(prepared=True)
-    query = """SELECT airline_name FROM airline_staff WHERE username = %s"""
-    cursor.execute(query, (email,))
-    data = cursor.fetchall()
-    cursor.close()
-    return data[0][0]
-=======
 def reg_validation_cus(conn,info):
 
     return status, err
 
-def reg_validation_cus(conn,info):
+def reg_validation_ba(conn,session):
+    query = 'select * from booking_agent ' \
+            'where email = \'%s\' ' \
+            'and pass_word = \'%s\' ' \
+            'and booking_agent_id = \'%s\''%(session['email'],session['password'],session['booking_agent_id'])
+    print(query)
+    cursor = conn.cursor()
+    cursor.execute(query)
+    data = cursor.fetchall()
+    print(data)
+    cursor.close()
+    if data:
+        return  False,'Email already in use.'
+    return True, ''
 
-    return valid, err
+def add_ba(conn, session):
+    query = 'insert into booking_agent values' \
+            '(\'%s\',\'%s\',\'%s\')'%(session['email'],session['password'],session['booking_agent_id'])
+    print(query)
+    cursor = conn.cursor()
+    cursor.execute(query)
+    conn.commit()
+    cursor.close()
+    return
 
-def reg_validation_cus(conn,info):
+def reg_validation_as(conn,session):
     return status, err
->>>>>>> Wendy
-=======
->>>>>>> 379f565d8f1708c8e1356a70465bdcc13ba8ecac
+
+
+def check_full(dic):
+    for key in dic.keys():
+        print(key, dic[key])
+        if dic[key] == '' or dic[key]== None:
+            return False
+    return True

@@ -1,157 +1,152 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-  body {font-family: Arial;}
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {font-family: Arial;}
 
-  /* Style the tab */
-  .tab {
-    overflow: hidden;
-    border: 1px solid #ccc;
-    background-color: #f1f1f1;
-  }
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
 
-  /* Style the buttons inside the tab */
-  .tab button {
-    background-color: inherit;
-    float: left;
-    border: none;
-    outline: none;
-    cursor: pointer;
-    padding: 14px 16px;
-    transition: 0.3s;
-    font-size: 17px;
-  }
+/* Style the buttons inside the tab */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
 
-  /* Change background color of buttons on hover */
-  .tab button:hover {
-    background-color: #ddd;
-  }
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
 
-  /* Create an active/current tablink class */
-  .tab button.active {
-    background-color: #ccc;
-  }
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
 
-  /* Style the tab content */
-  .tabcontent {
-    display: none;
-    padding: 6px 12px;
-    border: 1px solid #ccc;
-    border-top: none;
-  }
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
 </style>
 </head>
 <body>
 
-  <h2>Login</h2>
-  <p>Welcome Back</p>
+<h2>Login</h2>
+<p>Welcome Back</p>
 
-  <div class="tab">
-    <button class="tablinks" onclick="openCity(event, 'Customer')">Customer</button>
-    <button class="tablinks" onclick="openCity(event, 'Booking')">Booking agent</button>
-    <button class="tablinks" onclick="openCity(event, 'Staff')">Airline Staff</button>
+<div class="tab">
+  <button class="tablinks" onclick="openCity(event, 'London')">Customer</button>
+  <button class="tablinks" onclick="openCity(event, 'Paris')">Booking agent</button>
+  <button class="tablinks" onclick="openCity(event, 'Tokyo')">Airline Staff</button>
+</div>
+
+<div id="London" class="tabcontent">
+
+  <form action="/action_page.php" method="post">
+    <h3> Let's start our journey! </h3>
+
+  <div class="container">
+    <label for="uname"><b>Username</b></label>
+    <input type="text" placeholder="Enter Username" name="uname" required>
+
+    <label for="psw"><b>Password</b></label>
+    <input type="password" placeholder="Enter Password" name="psw" required>
+
+    <button type="submit">Login</button>
+    <label>
+      <input type="checkbox" checked="checked" name="remember"> Remember me
+    </label>
   </div>
+  </form>
 
-  <div id="Customer" class="tabcontent">
+</div>
 
-    <form action="/sign_in" method="post">
-      <h3> Let's start our journey! </h3>
+<div id="Paris" class="tabcontent">
+  <h3>Thanks for your supports</h3>
 
-      <div class="container">
-        <label for="username"><b>Username</b></label>
-        <input type="text" placeholder="Enter Username" name="username" required>
+<form action="/action_page.php" method="post">
+    <div class="container">
+      <label for="uname"><b>Username</b></label>
+      <input type="text" placeholder="Enter Username" name="uname" required>
 
-        <label for="password"><b>Password</b></label>
-        <input type="password" placeholder="Enter Password" name="password" required>
+      <label for="psw"><b>Password</b></label>
+      <input type="password" placeholder="Enter Password" name="psw" required>
 
-        <button type="submit">Login</button>
-        <label>
-          <input type="checkbox" checked="checked" name="remember"> Remember me
-        </label>
-      </div>
-    </form>
+      <button type="submit">Login</button>
+      <label>
+        <input type="checkbox" checked="checked" name="remember"> Remember me
+      </label>
+    </div>
+<form>
+</div>
 
-  </div>
+<div id="Tokyo" class="tabcontent">
+  <h3>Thanks for your support</h3>
+<form action="/action_page.php" method="post">
+    <h3> Let's start our journey! </h3>
 
-  <div id="Booking" class="tabcontent">
-    <h3>Thanks for your supports</h3>
+    <br class="container">
+      <label for="uname"><b>Username</b></label>
+      <input type="text" placeholder="Enter Username" name="uname" required>
 
-    <form action="/sign_in" method="post">
-      <div class="container">
-        <label for="username"><b>Username</b></label>
-        <input type="text" placeholder="Enter Username" name="username" required>
+      <label for="psw"><b>Password</b></label>
+      <input type="password" placeholder="Enter Password" name="psw" required>
 
-        <label for="password"><b>Password</b></label>
-        <input type="password" placeholder="Enter Password" name="password" required>
+      <label for="first name"><b>First name</b></label>
+      <input type="text" placeholder="Enter first name" name="uname" required>
 
-        <button type="submit">Login</button>
-        <label>
-          <input type="checkbox" checked="checked" name="remember"> Remember me
-        </label>
-      </div>
-      <form>
-      </div>
+      <label for="last name"><b>last name</b></label>
+      <input type="text" placeholder="Enter last name" name="uname" required>
 
-      <div id="Staff" class="tabcontent">
-        <h3>Thanks for your support</h3>
-        <form action="/sign_in" method="post">
-          <h3> Let's start our journey! </h3>
-
-          <br class="container">
-          <label for="username"><b>Username</b></label>
-          <input type="text" placeholder="Enter Username" name="username" required>
-
-          <label for="password"><b>Password</b></label>
-          <input type="password" placeholder="Enter Password" name="password" required>
-
-          <label for="first name"><b>First name</b></label>
-          <input type="text" placeholder="Enter first name" name="uname" required>
-
-          <label for="last name"><b>last name</b></label>
-          <input type="text" placeholder="Enter last name" name="uname" required>
-
-          <b>Air Line</b>
-          <input type="text" name="to" list='list1' placeholder="Select">
-          <datalist id="list1">
-            {% for i in airline %}
-            <option>{{ i }}</option>
-            {% endfor %}
-          </datalist>
+      <b>Air Line</b>
+      <input type="text" name="to" list='list1' placeholder="Select">
+      <datalist id="list1">
+          {% for i in airline %}
+              <option>{{ i }}</option>
+          {% endfor %}
+      </datalist>
 
 
 
-          <br>Date of Birth:<br>
-          <input class="Date_input" type="date" name = "date" id="all_date">
+      <br>Date of Birth:<br>
+      <input class="Date_input" type="date" name = "date" id="all_date">
 
-          <button type="submit">Login</button>
-          <label>
-            <input type="checkbox" checked="checked" name="remember"> Remember me
-          </label>
-        </div>
-      </div>
+      <button type="submit">Login</button>
+      <label>
+        <input type="checkbox" checked="checked" name="remember"> Remember me
+      </label>
+    </div>
+</div>
 
-      {%if error%}
-      <div class="error">
-        {{error}}
-      </div>
-      {%endif%}
-      <script>
-      function openCity(evt, cityName) {
-        var i, tabcontent, tablinks;
-        tabcontent = document.getElementsByClassName("tabcontent");
-        for (i = 0; i < tabcontent.length; i++) {
-          tabcontent[i].style.display = "none";
-        }
-        tablinks = document.getElementsByClassName("tablinks");
-        for (i = 0; i < tablinks.length; i++) {
-          tablinks[i].className = tablinks[i].className.replace(" active", "");
-        }
-        document.getElementById(cityName).style.display = "block";
-        evt.currentTarget.className += " active";
-      }
-    </script>
+<script>
+function openCity(evt, cityName) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  document.getElementById(cityName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+</script>
 
-  </body>
-  </html>
+</body>
+</html>

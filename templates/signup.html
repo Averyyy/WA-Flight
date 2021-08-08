@@ -49,6 +49,16 @@ body {font-family: Arial;}
 <h2>Sign up</h2>
 <p>Welcome!</p>
 
+
+{% if error%}
+    <div class = 'warning'>
+      {{error}}
+      Please<a href= "{{ url_for("sign_in")}}" > sign in.</a>
+    </div>
+{% endif %}
+
+
+
 <div class="tab">
   <button class="tablinks" onclick="openCity(event, 'London')">Customer</button>
   <button class="tablinks" onclick="openCity(event, 'Paris')">Booking Agent</button>
@@ -57,49 +67,51 @@ body {font-family: Arial;}
 
 <div id="London" class="tabcontent">
 
-  <form action="/action_page.php" method="post">
+  <form action="/sign_up" method="post">
 
   <div class="container">
     <label for="uname"><b>Email</b></label>
-    <input type="text"  name="Email" required>
+    <input type="text"  name="Email">
 
     <label for="text"><b>Preferred name</b></label>
-    <input type="text"  name="pre name" required>
+    <input type="text"  name="pre name">
 
     <label for="psw"><b>Password</b></label>
-    <input type="password" name="psw" required>
+    <input type="password" name="psw">
 
     <label for="text"><b>Building number</b></label>
-    <input type="text"  name="bui num" required>
+    <input type="text"  name="bui num" >
 
     <label for="text"><b>Street</b></label>
-    <input type="text"  name="street" required>
+    <input type="text"  name="street">
 
     <label for="text"><b>City</b></label>
-    <input type="text"  name="city" required>
+    <input type="text"  name="city">
 
     <label for="text"><b>State</b></label>
-    <input type="text"  name="state" required>
+    <input type="text"  name="state">
 
     <label for="text"><b>Phone number</b></label>
-    <input type="text"  name="pho num" required>
+    <input type="text"  name="pho num">
 
     <label for="text"><b>Passport number</b></label>
-    <input type="text"  name="psp num" required>
+    <input type="text"  name="psp num">
 
     <label for="date"><b>Passport expiration date</b></label>
-    <input type="date"  name="psp exp" required>
+    <input type="date"  name="psp exp">
 
     <label for="text"><b>Passport country</b></label>
-    <input type="text"  name="psp cou" required>
+    <input type="text"  name="psp cou">
 
     <label for="date"><b>Date of Birth</b></label>
-    <input type="date"  name="DoB" required>
+    <input type="date"  name="DoB">
 
-    <button type="submit">Login</button>
+    <button type="submit">Sign up</button>
     <label>
       <input type="checkbox" checked="checked" name="remember"> Remember me
     </label>
+
+
   </div>
   </form>
 
@@ -107,18 +119,24 @@ body {font-family: Arial;}
 
 <div id="Paris" class="tabcontent">
 
-<form action="/action_page.php" method="post">
+<form action='/sign_up' method="post">
     <div class="container">
       <label for="email"><b>Username</b></label>
-      <input type="text" name="ba_email" required>
+      <input type="text" name="ba_email" >
 
       <label for="psw"><b>Password</b></label>
-      <input type="password"  name="ba_psw" required>
+      <input type="password"  name="ba_psw" >
 
       <label for="text"><b>Booking agent ID</b></label>
-      <input type="text" name="ba_id" required>
+      <input type="text" name="ba_id" >
 
-      <button type="submit">Login</button>
+
+      <button type="submit" >Sign up</button>
+<!--      <script>-->
+<!--      function myFunction() {-->
+<!--       window.location.href="{{ url_for("signup_ba")}}";-->
+<!--     }-->
+<!--      </script>-->
       <label>
         <input type="checkbox" checked="checked" name="remember"> Remember me
       </label>
@@ -127,20 +145,20 @@ body {font-family: Arial;}
 </div>
 
 <div id="Tokyo" class="tabcontent">
-<form action="/action_page.php" method="post">
+<form action='/sign_up' method="post">
 
     <br class="container">
       <label for="uname"><b>Username</b></label>
-      <input type="text" name="uname" required>
+      <input type="text" name="uname">
 
       <label for="psw"><b>Password</b></label>
-      <input type="password" name="psw" required>
+      <input type="password" name="psw">
 
       <label for="first name"><b>First name</b></label>
-      <input type="text"  name="uname" required>
+      <input type="text"  name="uname" >
 
       <label for="last name"><b>last name</b></label>
-      <input type="text" name="uname" required>
+      <input type="text" name="uname" >
 
       <b>Air Line</b>
       <input type="text" name="to" list='list1' placeholder="Select">
@@ -150,12 +168,10 @@ body {font-family: Arial;}
           {% endfor %}
       </datalist>
 
-
-
       <br>Date of Birth:<br>
       <input class="Date_input" type="date" name = "date" id="all_date">
 
-      <button type="submit">Login</button>
+      <button type="submit">Sign up</button>
       <label>
         <input type="checkbox" checked="checked" name="remember"> Remember me
       </label>

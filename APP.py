@@ -17,6 +17,12 @@ conn = pymysql.connect(host= '127.0.0.1',
                        charset='utf8mb4',
                        cursorclass=pymysql.cursors.DictCursor)
 
+# Utility Functions
+def save_to_session(dic):
+    for key in dic.keys():
+        session[key] = dic[key]
+    return
+
 @app.route('/', methods = ["GET","POST"])
 def init_app():
     return render_template("index.html")
@@ -53,99 +59,99 @@ def public_view():
                                d=data_dic)
 
 
-@app.route('/search',methods = ['GET','POST'])
-def ty():
-    print('Hello world')
-    return
-
 @app.route("/sign_up", methods=["POST", "GET"])
 def sign_up():
+    if request.method =='GET':
+        print('yes')
+        return render_template("signup.html")
+    if request.method == 'POST':
+        info_cus = {
+            "email": request.form.get("Email"),
+            "password": request.form.get("psw"),
+            "name": request.form.get("pre name"),
+            "building_number": request.form.get("bui num"),
+            "street": request.form.get("street"),
+            "city": request.form.get("city"),
+            "state": request.form.get("state"),
+            "phone_number": request.form.get("pho num"),
+            "passport_number": request.form.get("psp num"),
+            "passport_expiration": request.form.get("psp exp"),
+            "passport_country": request.form.get("psp cou"),
+            "date_of_birth": request.form.get("DoB"),
+            "booking_agent_id": request.form.get("booking_agent_id"),
+            "airline_name": request.form.get("airline_name")
+        }
+        info_ba = {
+            "email": request.form.get("ba_email"),
+            "password": request.form.get("ba_psw"),
+            "booking_agent_id": request.form.get("ba_id")
+        }
+        info_as = {
+            "email": request.form.get("username"),
+            "password": request.form.get("password"),
+            "first_name": request.form.get("first_name"),
+            "last_name": request.form.get("last_name"),
+            "date_of_birth": request.form.get("DoB"),
+            "airline_name": request.form.get("airline_name")
+        }
+        if query.check_full(info_cus):
+            save_to_session(info_cus)
+            return redirect(url_for("signup_cus"))
+        elif query.check_full(info_ba):
+            save_to_session(info_ba)
+            print('session',session.get('email'))
+            return redirect(url_for("signup_ba"))
+        elif query.check_full(info_as):
+            save_to_session(info_as)
+            return redirect(url_for("signup_as"))
 
-    return render_template("signup.html")
 
-@app.route("/sign_in", methods=['GET', 'POST'])
+
+@app.route("/sign_in", methods=["POST", "GET"])
 def sign_in():
-    if request.method == 'GET':
-        return render_template("signin.html")
+    pass
 
+
+@app.route('/register/customer', methods=['GET', 'POST'])
+def signup_cus():
+    error = ""
+    if request.method == "GET":
+        return render_template("signup.html", error=error)
     elif request.method == "POST":
-        session['username'] = request.form['username']
-        session["password"] = request.form["password"]
-        if not query.login_check(conn, session['username'], session["password"], 'customer'):
-            error = 'Invalid Account Information, Please Check or Register.'
-            return redirect(url_for('sign_in'), error=error)
+        pass
+        # valid, error = query.reg_validation(conn, info)
+        # # when db find it is an invalid login
+        # if not valid:
+        #     return render_template("signup.html", error=error)
+        #
+        # db_utils.register_to_database(conn, info, identity)
+        # session["logged_in"] = True
+        # session["type"] = identity
+        # session["email"] = info["email"]
+        # if identity == "airline_staff":
+        #     session["airline"] = info["airline_name"]
+        # return redirect(url_for("search_flight"))
 
-@app.route("/sign_in/customer_home", methods=["POST", "GET"])
-def customer_home():
-    pass
+@app.route('/register/booking_agent', methods=['POST','GET'])
+def signup_ba():
+    # Pass the session input information from html to the backend to check whether the address is already in use.
+    valid, err = query.reg_validation_ba(conn, session)
+    print('result', valid, err)
+    if valid:
+        query.add_ba(conn, session)
+        return render_template('homepage_ba.html')
+
+    else:
+        return render_template('signup.html', error = err)
 
 
-@app.route("/sign_in/agent_home", methods=["POST", "GET"])
-def agent_home():
-    pass
 
-@app.route("/sign_in/staff_home", methods=["POST", "GET"])
-def staff_home():
-    pass
-
-
-# @app.route('/register/customer', methods=['GET', 'POST'])
-# def signup_cus(identity):
-#     error = ""
-#     if request.method == "GET":
-#         return render_template("signup.html", error=error)
-#     elif request.method == "POST":
-#         info = {"email": request.form.get("Email"),
-#                 "password": request.form.get("psw"),
-#                 "name": request.form.get("pre name"),
-#
-#                 "building_number": request.form.get("bui num"),
-#                 "street": request.form.get("street"),
-#                 "city": request.form.get("city"),
-#                 "state": request.form.get("state"),
-#                 "phone_number": request.form.get("pho num"),
-#                 "passport_number": request.form.get("psp num"),
-#                 "passport_expiration": request.form.get("psp exp"),
-#                 "passport_country": request.form.get("psp cou"),
-#                 "date_of_birth": request.form.get("DoB"),
-#                 "booking_agent_id": request.form.get("booking_agent_id"),
-#                 "airline_name": request.form.get("airline_name")
-#                 }
-#
-#         valid, error = query.reg_validation(conn, info)
-#         # when db find it is an invalid login
-#         if not valid:
-#             return render_template("signup.html", error=error)
-#
-#         db_utils.register_to_database(conn, info, identity)
-#         session["logged_in"] = True
-#         session["type"] = identity
-#         session["email"] = info["email"]
-#         if identity == "airline_staff":
-#             session["airline"] = info["airline_name"]
-#         return redirect(url_for("search_flight"))
-
-@app.route('/register/booking_agent', methods=['GET', 'POST'])
-def signup_ba(identity):
-    info = {
-        "email": request.form.get("username"),
-        "password": request.form.get("password"),
-        "name": request.form.get("name"),
-    }
     
 
 
 @app.route('/register/airline_staff', methods=['GET', 'POST'])
-def signup_as(identity):
-
-    info = {
-        "email": request.form.get("username"),
-        "password": request.form.get("password"),
-        "first_name": request.form.get("first_name"),
-        "last_name": request.form.get("last_name"),
-        "date_of_birth": request.form.get("DoB"),
-        "airline_name": request.form.get("airline_name")
-    }
+def signup_as():
+    pass
 
 
 
