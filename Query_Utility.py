@@ -4,11 +4,14 @@ import datetime
 import time
 from flask import Flask, render_template, request, session, redirect, url_for
 import pprint
+
 from werkzeug.security import generate_password_hash, check_password_hash
 
 PASSWORD_HASH = 'md5'
 # ===========================================================================================
 #public view
+
+# =================================
 
 dic_airport_city = {"PVG":"Shanghai",
                     "PEK":"Beijing",
@@ -60,19 +63,19 @@ def get_locations(conn):
 
 # the options for searching filter
 # NOT IN USE
-# def get_departure_time():
-#     d_dic = {
-#         'departure_time': [],
-#         'arrival_time': []
-#     }
-#
-#     for i in range(len(data)):
-#         d_dic['departure_time'].append(str(data[i]['departure_time']))
-#         d_dic['arrival_time'].append(str(data[i]['arrival_time']))
-#
-#     # get rid of all the duplicate elements
-#     d_dic['departure_time'] = remove_duplicate(d_dic['CHANGE'])
-#     d_dic['arrival_time'] = remove_duplicate(d_dic['CHANGE'])
+def get_departure_time():
+    d_dic = {
+        'departure_time': [],
+        'arrival_time': []
+    }
+
+    for i in range(len(data)):
+        d_dic['departure_time'].append(str(data[i]['departure_time']))
+        d_dic['arrival_time'].append(str(data[i]['arrival_time']))
+
+    # get rid of all the duplicate elements
+    d_dic['departure_time'] = remove_duplicate(d_dic['CHANGE'])
+    d_dic['arrival_time'] = remove_duplicate(d_dic['CHANGE'])
 
 
 
@@ -112,7 +115,6 @@ def filter_result(conn,html_get):
         i['Arrival']= "%s | %s" % (airport_city(i['arrival_name']),i['arrival_name'])
     return data
 
-
 # ===========================================================================================
 #sign in
 
@@ -130,24 +132,42 @@ def login_check(conn, username, password, role):
         return False
     return check_password_hash(data[0][0], password)
 
+def reg_validation_cus(conn,info):
 
+    return status, err
 
-def airline_staff_initialization(conn, email):
-    cursor = conn.cursor(prepared=True)
-    query = """SELECT airline_name FROM airline_staff WHERE username = %s"""
-    cursor.execute(query, (email,))
+def reg_validation_ba(conn,session):
+    query = 'select * from booking_agent ' \
+            'where email = \'%s\' ' \
+            'and pass_word = \'%s\' ' \
+            'and booking_agent_id = \'%s\''%(session['email'],session['password'],session['booking_agent_id'])
+    print(query)
+    cursor = conn.cursor()
+    cursor.execute(query)
     data = cursor.fetchall()
+    print(data)
     cursor.close()
-    return data[0][0]
+    if data:
+        return  False,'Email already in use.'
+    return True, ''
 
-# def reg_validation_cus(conn,info):
-#
-#     return status, err
-#
-# def reg_validation_cus(conn,info):
-#
-#     return valid, err
-#
-# def reg_validation_cus(conn,info):
-#     return status, err
+def add_ba(conn, session):
+    query = 'insert into booking_agent values' \
+            '(\'%s\',\'%s\',\'%s\')'%(session['email'],session['password'],session['booking_agent_id'])
+    print(query)
+    cursor = conn.cursor()
+    cursor.execute(query)
+    conn.commit()
+    cursor.close()
+    return
 
+def reg_validation_as(conn,session):
+    return status, err
+
+
+def check_full(dic):
+    for key in dic.keys():
+        print(key, dic[key])
+        if dic[key] == '' or dic[key]== None:
+            return False
+    return True
