@@ -13,13 +13,11 @@ PASSWORD_HASH = 'md5'
 
 # =================================
 
-dic_airport_city = {"PVG":"Shanghai",
+dic_airport_city = {"HKG":"Hongkong",
+                    "MBC":"Mars Orbit",
                     "PEK":"Beijing",
-                    "CAN":"Guangzhou",
-                    "SZX":"Shenzhen",
-                    "NRT":"Tokyo",
-                    "JFK":"New York",
-                    "LHR":"London"}
+                    "PVG":"Shanghai",
+                    "TYO":"Tokyo"}
 
 def airport_city(airport):
     return dic_airport_city[airport]
@@ -44,8 +42,10 @@ def get_locations(conn):
     }
 
     for i in range(len(data)):
-        d_dic['departure_airport'].append(str(data[i]['departure_name']))
-        d_dic['arrival_airport'].append(str(data[i]['arrival_name']))
+        d_dic['departure_airport'].append(str(data[i]['departure_airport']))
+        d_dic['arrival_airport'].append(str(data[i]['arrival_airport']))
+
+    print(d_dic)
 
     # get rid of all the duplicate elements
     d_dic['departure_airport'] = remove_duplicate(d_dic['departure_airport'])
@@ -57,7 +57,7 @@ def get_locations(conn):
 
     for i in d_dic['arrival_airport']:
         d_dic['arrival_loc'].append("%s | %s" % (airport_city(i), i))
-    print('/////////',d_dic)
+
 
     return d_dic
 
@@ -99,8 +99,8 @@ def public_view(conn):
     cursor.close()
 
     for i in data:
-        i['Departure']= "%s | %s" % (airport_city(i['departure_name']),i['departure_name'])
-        i['Arrival']= "%s | %s" % (airport_city(i['arrival_name']),i['arrival_name'])
+        i['Departure']= "%s | %s" % (airport_city(i['departure_airport']),i['departure_airport'])
+        i['Arrival']= "%s | %s" % (airport_city(i['arrival_airport']),i['arrival_airport'])
     return data
 
 def filter_result(conn,html_get):
@@ -110,11 +110,11 @@ def filter_result(conn,html_get):
     #                     'dt':request.form['departure']} -- Shanghai | PVG
     query = "select * from flight where"
     if html_get['from']:
-        html_get['departure_name'] = html_get['from'].split('|')[1].strip()
-        query += ' %s = \'%s\' '% ('departure_name', html_get['departure_name'])
+        html_get['departure_airport'] = html_get['from'].split('|')[1].strip()
+        query += ' %s = \'%s\' '% ('departure_airport', html_get['departure_airport'])
     if html_get['to']:
-        html_get['arrival_name'] = html_get['to'].split('|')[1].strip()
-        query += 'and %s =\'%s\' ' % ('arrival_name', html_get['arrival_name'])
+        html_get['arrival_airport'] = html_get['to'].split('|')[1].strip()
+        query += 'and %s =\'%s\' ' % ('arrival_airport', html_get['arrival_airport'])
     if html_get['dt'] != '':
         query += 'and %s = \'%s\'' % ('dt', html_get['dt'])
     cursor = conn.cursor()
@@ -122,8 +122,8 @@ def filter_result(conn,html_get):
     data = cursor.fetchall()
     cursor.close()
     for i in data:
-        i['Departure']= "%s | %s" % (airport_city(i['departure_name']),i['departure_name'])
-        i['Arrival']= "%s | %s" % (airport_city(i['arrival_name']),i['arrival_name'])
+        i['Departure']= "%s | %s" % (airport_city(i['departure_airport']),i['departure_airport'])
+        i['Arrival']= "%s | %s" % (airport_city(i['arrival_airport']),i['arrival_airport'])
     return data
 
 # ===========================================================================================
