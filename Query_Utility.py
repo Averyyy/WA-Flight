@@ -61,6 +61,17 @@ def get_locations(conn):
 
     return d_dic
 
+def get_airlines(conn):
+    cursor = conn.cursor()
+    query = "select * from airline"
+    cursor.execute(query)
+    data = cursor.fetchall()
+    cursor.close()
+    airlines = []
+    for i in range(len(data)):
+        airlines.append(str(data[i]['airline_name']))
+    return airlines
+
 # the options for searching filter
 # NOT IN USE
 def get_departure_time():

@@ -21,7 +21,7 @@ conn = pymysql.connect(host= 'localhost',
                        user='root',
                        password = '',
                        # port = 3307,
-                       db='Wendy\'s',
+                       db='fly',
                        charset='utf8mb4',
                        cursorclass=pymysql.cursors.DictCursor)
 
@@ -159,15 +159,38 @@ def signup_as():
 
 @app.route("/sign_in", methods=['GET', 'POST'])
 def sign_in():
-    if request.method == 'GET':
-        return render_template("signin.html")
-
-    elif request.method == "POST":
-        session['username'] = request.form['username']
-        session["password"] = request.form["password"]
-        if not query.login_check(conn, session['username'], session["password"], 'customer'):
-            error = 'Invalid Account Information, Please Check or Register.'
-            return redirect(url_for('sign_in'), error=error)
+    if request.method =='GET':
+        airlines = query.get_airlines(conn)
+        print(airlines)
+        return render_template("public_view.html",
+                               airlines = airlines)
+    if request.method == 'POST':
+        info_cus = {
+            "email": request.form.get("uname"),
+            "password": request.form.get("psw"),
+        }
+        info_ba = {
+            "email": request.form.get("ba_email"),
+            "password": request.form.get("ba_psw"),
+        }
+        info_as = {
+            "email": request.form.get("username"),
+            "password": request.form.get("password"),
+            "first_name": request.form.get("first_name"),
+            "last_name": request.form.get("last_name"),
+            "date_of_birth": request.form.get("DoB"),
+            "airline_name": request.form.get("airline_name")
+        }
+        if query.check_full(info_cus):
+            save_to_session(info_cus)
+            return redirect(url_for("signup_cus"))
+        elif query.check_full(info_ba):
+            save_to_session(info_ba)
+            print('session',session.get('email'))
+            return redirect(url_for("signup_ba"))
+        elif query.check_full(info_as):
+            save_to_session(info_as)
+            return redirect(url_for("signup_as"))
 
 @app.route("/sign_in/customer_home", methods=["POST", "GET"])
 def customer_home():

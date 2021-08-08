@@ -49,14 +49,14 @@ body {font-family: Arial;}
 <p>Welcome Back</p>
 
 <div class="tab">
-  <button class="tablinks" onclick="openCity(event, 'London')">Customer</button>
-  <button class="tablinks" onclick="openCity(event, 'Paris')">Booking agent</button>
-  <button class="tablinks" onclick="openCity(event, 'Tokyo')">Airline Staff</button>
+  <button class="tablinks" onclick="openCity(event, 'customer')">Customer</button>
+  <button class="tablinks" onclick="openCity(event, 'book')">Booking agent</button>
+  <button class="tablinks" onclick="openCity(event, 'staff')">Airline Staff</button>
 </div>
 
-<div id="London" class="tabcontent">
+<div id="customer" class="tabcontent">
 
-  <form action="/action_page.php" method="post">
+  <form action="/sign_in" method="post">
     <h3> Let's start our journey! </h3>
 
   <div class="container">
@@ -75,16 +75,16 @@ body {font-family: Arial;}
 
 </div>
 
-<div id="Paris" class="tabcontent">
+<div id="book" class="tabcontent">
   <h3>Thanks for your supports</h3>
 
-<form action="/action_page.php" method="post">
+<form action="/sign_in" method="post">
     <div class="container">
       <label for="uname"><b>Username</b></label>
-      <input type="text" placeholder="Enter Username" name="uname" required>
+      <input type="text" placeholder="Enter Username" name="ba_uname" required>
 
       <label for="psw"><b>Password</b></label>
-      <input type="password" placeholder="Enter Password" name="psw" required>
+      <input type="password" placeholder="Enter Password" name="ba_psw" required>
 
       <button type="submit">Login</button>
       <label>
@@ -94,36 +94,28 @@ body {font-family: Arial;}
 <form>
 </div>
 
-<div id="Tokyo" class="tabcontent">
+<div id="staff" class="tabcontent">
   <h3>Thanks for your support</h3>
-<form action="/action_page.php" method="post">
+<form action="/sign_in" method="post">
     <h3> Let's start our journey! </h3>
 
     <br class="container">
       <label for="uname"><b>Username</b></label>
-      <input type="text" placeholder="Enter Username" name="uname" required>
+      <input type="text" placeholder="Enter Username" name="as_uname" required>
 
       <label for="psw"><b>Password</b></label>
-      <input type="password" placeholder="Enter Password" name="psw" required>
-
-      <label for="first name"><b>First name</b></label>
-      <input type="text" placeholder="Enter first name" name="uname" required>
-
-      <label for="last name"><b>last name</b></label>
-      <input type="text" placeholder="Enter last name" name="uname" required>
+      <input type="password" placeholder="Enter Password" name="as_psw" required>
 
       <b>Air Line</b>
       <input type="text" name="to" list='list1' placeholder="Select">
       <datalist id="list1">
-          {% for i in airline %}
+          {% for i in airlines %}
               <option>{{ i }}</option>
           {% endfor %}
       </datalist>
 
 
 
-      <br>Date of Birth:<br>
-      <input class="Date_input" type="date" name = "date" id="all_date">
 
       <button type="submit">Login</button>
       <label>
