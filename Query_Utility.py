@@ -145,14 +145,27 @@ def sign_in_check(conn, username, password,role, airline_name):
     # return check_password_hash(data[0][0], password)
     return data[0]['password'] == password
 
-def reg_validation_cus(conn,info):
+# ======== Sign up
+# sign up validation check
+def reg_validation_cus(conn,session):
+    query = 'select * from customer ' \
+            'where email = \'%s\' ' \
+            'and password = \'%s\' '  % (session['email'], session['password'])
+    print(query)
 
-    return status, err
+    cursor = conn.cursor()
+    cursor.execute(query)
+    data = cursor.fetchall()
+    print(data)
+    cursor.close()
+    if data:
+        return False, 'Email already in use.'
+    return True, ''
 
 def reg_validation_ba(conn,session):
     query = 'select * from booking_agent ' \
             'where email = \'%s\' ' \
-            'and pass_word = \'%s\' ' \
+            'and password = \'%s\' ' \
             'and booking_agent_id = \'%s\''%(session['email'],session['password'],session['booking_agent_id'])
     print(query)
     cursor = conn.cursor()
@@ -164,18 +177,57 @@ def reg_validation_ba(conn,session):
         return  False,'Email already in use.'
     return True, ''
 
-def add_ba(conn, session):
-    query = 'insert into booking_agent values' \
-            '(\'%s\',\'%s\',\'%s\')'%(session['email'],session['password'],session['booking_agent_id'])
-    print(query)
+def reg_validation_as(conn,session):
+    query = 'select * from airline_staff ' \
+            'where username = \'%s\' ' \
+            'and password = \'%s\' '% (session['username'], session['password'])
+    cursor = conn.cursor()
+    cursor.execute(query)
+    data = cursor.fetchall()
+    cursor.close()
+    if data:
+        return False, 'Already registered.'
+    return True, ''
+
+# inserting data into database
+def add_cus(conn, session):
+    # set a query
+    query = 'insert into customer values' \
+            '(\'%s\',\'%s\',\'%s\',\'%s\',\'%s\',\'%s\',\'%s\',\'%s\',\'%s\',\'%s\',\'%s\',\'%s\')' % (session['email'], session['name'],
+                                                             session['password'], session['building_number'],
+                                                             session['street'], session['city'],
+                                                            session['state'], session['phone_number'],
+                                                            session['passport_number'], session['passport_expiration'],
+                                                            session['passport_country'], session['date_of_birth'])
+
+    # use cursor to insert data
     cursor = conn.cursor()
     cursor.execute(query)
     conn.commit()
     cursor.close()
     return
 
-def reg_validation_as(conn,session):
-    return status, err
+def add_ba(conn, session):
+    query = 'insert into booking_agent values' \
+            '(\'%s\',\'%s\',\'%s\')'%(session['email'],session['password'],session['booking_agent_id'])
+    cursor = conn.cursor()
+    cursor.execute(query)
+    conn.commit()
+    cursor.close()
+    return
+
+def add_as(conn, session):
+    query = 'insert into airline_staff values' \
+            '(\'%s\',\'%s\',\'%s\',\'%s\',\'%s\',\'%s\')'%(session['username'],session['password'],
+                                                            session['first_name'],session['last_name'],
+                                                            session['date_of_birth'],session['airline_name'],)
+    cursor = conn.cursor()
+    cursor.execute(query)
+    conn.commit()
+    cursor.close()
+    return
+
+# ======== End of sign up
 
 
 def check_full(dic):
