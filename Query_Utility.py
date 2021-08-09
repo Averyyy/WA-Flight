@@ -72,6 +72,17 @@ def get_airlines(conn):
         airlines.append(str(data[i]['airline_name']))
     return airlines
 
+def get_flight_num(conn):
+    cursor = conn.cursor()
+    query = "select distinct flight_num from flight"
+    cursor.execute(query)
+    data = cursor.fetchall()
+    cursor.close()
+    flight_num= []
+    for i in range(len(data)):
+        flight_num.append(str(data[i]['flight_num']))
+    return flight_num
+
 # the options for searching filter
 # NOT IN USE
 # def get_departure_time():
@@ -128,16 +139,15 @@ def filter_result(conn,html_get):
 
 def get_purchased_flight(conn,session):
     cursor = conn.cursor()
-    query ='select * from flight where flight_num in (select flight_num from ticket, purchase ' \
-           'where ticket.ticket_id = purchase.ticket_id and %s = \'%s\')'
+    query ='select * from flight where flight_num in (select flight_num from ticket, purchases ' \
+           'where ticket.ticket_id = purchases.ticket_id and %s = \'%s\')'
     if session["user_type"] == 'customer':
-        pass
+        query = query%('customer_email', session['email'])
     if session["user_type"] == 'booking_agent':
-        pass
-    if session["user_type"] == 'customer':
-        pass
-
-
+        query = query % ('booking_agent_email', session['email'])
+    if session["user_type"] == 'airline_staff':
+        query = 'select * from flight where flight_num in (select flight_num from ticket where airline_name = \'%s\')'%(session["airline_name"])
+    print(query)
     cursor.execute(query)
     data = cursor.fetchall()
     cursor.close()

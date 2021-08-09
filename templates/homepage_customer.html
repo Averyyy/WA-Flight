@@ -82,6 +82,41 @@
 			</form>
 	</div>
 <!--<default view of upcoming schedule>-->
+
+<table class="table">
+  <thead>
+    <tr>
+
+      <th scope="col">#</th>
+      <th scope="col">Airline name</th>
+      <th scope="col">Flight number</th>
+      <th scope="col">Departure time</th>
+	  <th scope="col">Arrivel time</th>
+	  <th scope="col">Price</th>
+	  <th scope="col">Status</th>
+	  <th scope="col">Departure</th>
+	  <th scope="col">Arrival</th>
+    </tr>
+  </thead>
+  <tbody>
+	  {% for i in purchased %}
+
+	  <tr>
+	    <td></td>
+		<td>{{ i['airline_name']}}</td>
+		<td>{{ i['flight_num']}}</td>
+		<td>{{ i['departure_time']}}</td>
+		<td>{{ i['arrival_time']}}</td>
+		<td>{{ i['price']}}</td>
+		<td>{{ i['status']}}</td>
+		<td>{{ i['Departure']}}</td>
+		<td>{{ i['Arrival']}}</td>
+	  </tr>
+	  {% endfor %}
+
+  </tbody>
+</table>
+
 <table class="table">
   <thead>
     <tr>
@@ -100,10 +135,10 @@
   <tbody>
 
       <th scope="row"></th>
-	  {% for i in d %}
+	  {% for i in all %}
 
 	  <tr>
-	    <td><input type="checkbox" id="cbox1" value="first_checkbox"> </td>
+	    <td> </td>
 		<td>{{ i['airline_name']}}</td>
 		<td>{{ i['flight_num']}}</td>
 		<td>{{ i['departure_time']}}</td>
@@ -153,12 +188,26 @@
 
   </tbody>
 </table>
+	<div>
 	<form class="d-flex" >
 
-		  <a href="{{ url_for("sign_out") }}">
-   				<input type = 'button' class="btn btn-outline-success"  style="margin-right: 10pt; color = white;" value="Purchase"/>
-		  </a>
+	    <a href="{{ url_for("sign_out") }}">
+			<input type = 'button' class="btn btn-outline-success"  style="margin-right: 10pt; color = white;" value="Purchase"/>
+	    </a>
+		<datalist id="list3">
+			{% for i in airlines %}
+			<option>{{ i }}</option>
+			{% endfor %}
+		  </datalist>
+
+		  <datalist id="list4">
+			{% for i in flight_num %}
+			<option>{{ i }}</option>
+			{% endfor %}
+		  </datalist>
+
       </form>
+	</div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
 </body>
 
