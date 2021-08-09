@@ -126,6 +126,26 @@ def filter_result(conn,html_get):
         i['Arrival']= "%s | %s" % (airport_city(i['arrival_airport']),i['arrival_airport'])
     return data
 
+def get_purchased_flight(conn,session):
+    cursor = conn.cursor()
+    query ='select * from flight where flight_num in (select flight_num from ticket, purchase ' \
+           'where ticket.ticket_id = purchase.ticket_id and %s = \'%s\')'
+    if session["user_type"] == 'customer':
+
+    if session["user_type"] == 'booking_agent':
+        pass
+    if session["user_type"] == 'customer':
+        pass
+
+
+    cursor.execute(query)
+    data = cursor.fetchall()
+    cursor.close()
+    for i in data:
+        i['Departure'] = "%s | %s" % (airport_city(i['departure_airport']), i['departure_airport'])
+        i['Arrival'] = "%s | %s" % (airport_city(i['arrival_airport']), i['arrival_airport'])
+    return data
+
 # ===========================================================================================
 #sign in
 def sign_in_check(conn, username, password,role, airline_name):
