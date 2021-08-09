@@ -67,10 +67,7 @@ def public_view():
                                d=data_dic)
 
 
-@app.route('/search',methods = ['GET','POST'])
-def ty():
-    print('Hello world')
-    return
+# ====== sign up
 
 @app.route("/sign_up", methods=["POST", "GET"])
 def sign_up():
@@ -91,8 +88,6 @@ def sign_up():
             "passport_expiration": request.form.get("psp exp"),
             "passport_country": request.form.get("psp cou"),
             "date_of_birth": request.form.get("DoB"),
-            "booking_agent_id": request.form.get("booking_agent_id"),
-            "airline_name": request.form.get("airline_name")
         }
         info_ba = {
             "email": request.form.get("ba_email"),
@@ -100,62 +95,60 @@ def sign_up():
             "booking_agent_id": request.form.get("ba_id")
         }
         info_as = {
-            "email": request.form.get("username"),
-            "password": request.form.get("password"),
+            "username": request.form.get("as_uname"),
+            "password": request.form.get("psw"),
             "first_name": request.form.get("first_name"),
             "last_name": request.form.get("last_name"),
-            "date_of_birth": request.form.get("DoB"),
-            "airline_name": request.form.get("airline_name")
+            "date_of_birth": request.form.get("asDoB"),
+            "airline_name": request.form.get("as_airline")
         }
         if query.check_full(info_cus):
             save_to_session(info_cus)
             return redirect(url_for("signup_cus"))
         elif query.check_full(info_ba):
             save_to_session(info_ba)
-            print('session',session.get('email'))
             return redirect(url_for("signup_ba"))
         elif query.check_full(info_as):
             save_to_session(info_as)
-            return redirect(url_for("signup_as"))
+        return redirect(url_for("signup_as"))
 
 
-@app.route('/register/customer', methods=['GET', 'POST'])
+@app.route('/sign_up/customer', methods=['GET', 'POST'])
 def signup_cus():
-    error = ""
-    if request.method == "GET":
-        return render_template("signup.html", error=error)
-    elif request.method == "POST":
-        pass
-        # valid, error = query.reg_validation(conn, info)
-        # # when db find it is an invalid login
-        # if not valid:
-        #     return render_template("signup.html", error=error)
-        #
-        # db_utils.register_to_database(conn, info, identity)
-        # session["logged_in"] = True
-        # session["type"] = identity
-        # session["email"] = info["email"]
-        # if identity == "airline_staff":
-        #     session["airline"] = info["airline_name"]
-        # return redirect(url_for("search_flight"))
-
-
-@app.route('/register/booking_agent', methods=['POST', 'GET'])
-def signup_ba():
-    # Pass the session input information from html to the backend to check whether the address is already in use.
-    valid, err = query.reg_validation_ba(conn, session)
-    print('result', valid, err)
+    valid, err = query.reg_validation_cus(conn, session)
     if valid:
-        query.add_ba(conn, session)
-        return render_template('homepage_booking_agent.html')
-
+        session['logged_in'] = True
+        session["user_type"] = 'cus'
+        query.add_cus(conn, session)
+        return redirect(url_for("customer_home"))
     else:
         return render_template('signup.html', error=err)
 
 
-@app.route('/register/airline_staff', methods=['GET', 'POST'])
+@app.route('/sign_up/booking_agent', methods=['POST', 'GET'])
+def signup_ba():
+    # Pass the session input information from html to the backend to check whether the address is already in use.
+    valid, err = query.reg_validation_ba(conn, session)
+    if valid:
+        session['logged_in'] = True
+        session["user_type"] = 'booking_agent'
+        query.add_ba(conn, session)
+        return redirect(url_for("agent_home"))
+    else:
+        return render_template('signup.html', error=err)
+
+
+@app.route('/sign_up/airline_staff', methods=['GET', 'POST'])
 def signup_as():
-    pass
+    valid, err = query.reg_validation_as(conn, session)
+    if valid:
+        query.add_as(conn, session)
+        session['logged_in'] = True
+        session["user_type"] = 'as'
+        return redirect(url_for("staff_home"))
+    else:
+        return render_template('signup.html', error=err)
+
 
 
 @app.route("/sign_in", methods=['GET', 'POST'])
@@ -216,6 +209,13 @@ def staff_home():
         return redirect(url_for("sign_in"))
     elif session["signin"] and request.method == "GET":
         return render_template("public_view.html")
+
+
+@app.route("/sign_out", methods = ['POST','GET'])
+def sign_out():
+    if request.method == 'GET':
+        return render_template('sign_out.html')
+
 
 
 if __name__ =='__main__':
