@@ -147,7 +147,7 @@ def signup_ba():
     print('result', valid, err)
     if valid:
         query.add_ba(conn, session)
-        return render_template('homepage_ba.html')
+        return render_template('homepage_booking_agent.html')
 
     else:
         return render_template('signup.html', error=err)
