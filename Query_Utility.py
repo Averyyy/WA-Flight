@@ -4,14 +4,20 @@ import datetime
 import time
 from flask import Flask, render_template, request, session, redirect, url_for
 import pprint
+
+from werkzeug.security import generate_password_hash, check_password_hash
+
+PASSWORD_HASH = 'md5'
+# ===========================================================================================
+#public view
+
 # =================================
-dic_airport_city = {"PVG":"Shanghai",
+
+dic_airport_city = {"HKG":"Hongkong",
+                    "MBC":"Mars Orbit",
                     "PEK":"Beijing",
-                    "CAN":"Guangzhou",
-                    "SZX":"Shenzhen",
-                    "NRT":"Tokyo",
-                    "JFK":"New York",
-                    "LHR":"London"}
+                    "PVG":"Shanghai",
+                    "TYO":"Tokyo"}
 
 def airport_city(airport):
     return dic_airport_city[airport]
@@ -36,8 +42,10 @@ def get_locations(conn):
     }
 
     for i in range(len(data)):
-        d_dic['departure_airport'].append(str(data[i]['departure_name']))
-        d_dic['arrival_airport'].append(str(data[i]['arrival_name']))
+        d_dic['departure_airport'].append(str(data[i]['departure_airport']))
+        d_dic['arrival_airport'].append(str(data[i]['arrival_airport']))
+
+    print(d_dic)
 
     # get rid of all the duplicate elements
     d_dic['departure_airport'] = remove_duplicate(d_dic['departure_airport'])
@@ -50,7 +58,19 @@ def get_locations(conn):
     for i in d_dic['arrival_airport']:
         d_dic['arrival_loc'].append("%s | %s" % (airport_city(i), i))
 
+
     return d_dic
+
+def get_airlines(conn):
+    cursor = conn.cursor()
+    query = "select * from airline"
+    cursor.execute(query)
+    data = cursor.fetchall()
+    cursor.close()
+    airlines = []
+    for i in range(len(data)):
+        airlines.append(str(data[i]['airline_name']))
+    return airlines
 
 # the options for searching filter
 # NOT IN USE
@@ -79,8 +99,8 @@ def public_view(conn):
     cursor.close()
 
     for i in data:
-        i['Departure']= "%s | %s" % (airport_city(i['departure_name']),i['departure_name'])
-        i['Arrival']= "%s | %s" % (airport_city(i['arrival_name']),i['arrival_name'])
+        i['Departure']= "%s | %s" % (airport_city(i['departure_airport']),i['departure_airport'])
+        i['Arrival']= "%s | %s" % (airport_city(i['arrival_airport']),i['arrival_airport'])
     return data
 
 def filter_result(conn,html_get):
@@ -90,11 +110,11 @@ def filter_result(conn,html_get):
     #                     'dt':request.form['departure']} -- Shanghai | PVG
     query = "select * from flight where"
     if html_get['from']:
-        html_get['departure_name'] = html_get['from'].split('|')[1].strip()
-        query += ' %s = \'%s\' '% ('departure_name', html_get['departure_name'])
+        html_get['departure_airport'] = html_get['from'].split('|')[1].strip()
+        query += ' %s = \'%s\' '% ('departure_airport', html_get['departure_airport'])
     if html_get['to']:
-        html_get['arrival_name'] = html_get['to'].split('|')[1].strip()
-        query += 'and %s =\'%s\' ' % ('arrival_name', html_get['arrival_name'])
+        html_get['arrival_airport'] = html_get['to'].split('|')[1].strip()
+        query += 'and %s =\'%s\' ' % ('arrival_airport', html_get['arrival_airport'])
     if html_get['dt'] != '':
         query += 'and %s = \'%s\'' % ('dt', html_get['dt'])
     cursor = conn.cursor()
@@ -102,9 +122,28 @@ def filter_result(conn,html_get):
     data = cursor.fetchall()
     cursor.close()
     for i in data:
-        i['Departure']= "%s | %s" % (airport_city(i['departure_name']),i['departure_name'])
-        i['Arrival']= "%s | %s" % (airport_city(i['arrival_name']),i['arrival_name'])
+        i['Departure']= "%s | %s" % (airport_city(i['departure_airport']),i['departure_airport'])
+        i['Arrival']= "%s | %s" % (airport_city(i['arrival_airport']),i['arrival_airport'])
     return data
+
+# ===========================================================================================
+#sign in
+def sign_in_check(conn, username, password,role, airline_name):
+    cursor = conn.cursor()
+    # username = username.replace('\'', '\\\'')
+    query = """SELECT password FROM %s WHERE """ % role
+    if role == "airline_staff":
+        query += """username = \'%s\'""" % username
+        query += """ AND airline_name = \'%s\' """ %airline_name
+    else:
+        query += """email = \'%s\'""" % username
+    cursor.execute(query)
+    data = cursor.fetchall()
+    cursor.close()
+    if not data:
+        return False
+    # return check_password_hash(data[0][0], password)
+    return data[0]['password'] == password
 
 def reg_validation_cus(conn,info):
 

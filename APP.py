@@ -9,11 +9,18 @@ import pprint
 
 app = Flask(__name__)
 app.secret_key = "NK3K"
-conn = pymysql.connect(host= '127.0.0.1',
-                       user='Wendy',
-                       password = '12345',
-                       port = 3307,
-                       db='Project',
+# conn = pymysql.connect(host= '127.0.0.1',
+#                        user='Wendy',
+#                        password = '12345',
+#                        port = 3307,
+#                        db='Project',
+#                        charset='utf8mb4',
+#                        cursorclass=pymysql.cursors.DictCursor)
+
+conn = pymysql.connect(host= 'localhost',
+                       user='root',
+                       password = '',
+                       db='fly',
                        charset='utf8mb4',
                        cursorclass=pymysql.cursors.DictCursor)
 
@@ -30,11 +37,12 @@ def init_app():
 @app.route('/public_view', methods = ["GET","POST"])
 def public_view():
     if request.method =='GET':
+
         data_dic = query.public_view(conn)
         locations = query.get_locations(conn)
         # pprint.pprint(data['arrival_city'])
         # print(request.form['from'])
-        # print(data_dic)
+        print(data_dic)
         print(locations)
         return render_template("public_view.html",
                            departure_city = locations['departure_loc'],
@@ -58,6 +66,11 @@ def public_view():
                                arrival_city=locations['arrival_loc'],
                                d=data_dic)
 
+
+@app.route('/search',methods = ['GET','POST'])
+def ty():
+    print('Hello world')
+    return
 
 @app.route("/sign_up", methods=["POST", "GET"])
 def sign_up():
@@ -106,12 +119,6 @@ def sign_up():
             return redirect(url_for("signup_as"))
 
 
-
-@app.route("/sign_in", methods=["POST", "GET"])
-def sign_in():
-    pass
-
-
 @app.route('/register/customer', methods=['GET', 'POST'])
 def signup_cus():
     error = ""
@@ -132,7 +139,8 @@ def signup_cus():
         #     session["airline"] = info["airline_name"]
         # return redirect(url_for("search_flight"))
 
-@app.route('/register/booking_agent', methods=['POST','GET'])
+
+@app.route('/register/booking_agent', methods=['POST', 'GET'])
 def signup_ba():
     # Pass the session input information from html to the backend to check whether the address is already in use.
     valid, err = query.reg_validation_ba(conn, session)
@@ -142,11 +150,7 @@ def signup_ba():
         return render_template('homepage_ba.html')
 
     else:
-        return render_template('signup.html', error = err)
-
-
-
-    
+        return render_template('signup.html', error=err)
 
 
 @app.route('/register/airline_staff', methods=['GET', 'POST'])
@@ -154,10 +158,64 @@ def signup_as():
     pass
 
 
+@app.route("/sign_in", methods=['GET', 'POST'])
+def sign_in():
+    if request.method =='GET':
+        error = session.get('error')
+        airlines = query.get_airlines(conn)
+        return render_template("signin.html",
+                               airlines = airlines, error = error)
+    if request.method == 'POST':
+        info_cus = {
+            "email": request.form.get("uname"),
+            "password": request.form.get("psw"),
+        }
+        info_ba = {
+            "email": request.form.get("ba_email"),
+            "password": request.form.get("ba_psw"),
+        }
+        info_as = {
+            "email": request.form.get("as_uname"),
+            "password": request.form.get("as_psw"),
+            "airline_name": request.form.get("airline_name")
+        }
+        if query.check_full(info_cus):
+            save_to_session(info_cus)
+            return redirect(url_for("customer_home"))
+        elif query.check_full(info_ba):
+            save_to_session(info_ba)
+            return redirect(url_for("agent_home"))
+        elif query.check_full(info_as):
+            save_to_session(info_as)
+            return redirect(url_for("staff_home"))
+
+@app.route("/sign_in/customer_home", methods=["POST", "GET"])
+def customer_home():
+    session['signin'] = query.sign_in_check(conn, session['email'],session["password"], 'customer','')
+    if not session["signin"] and request.method == 'GET':
+        session["error"] = 'Invalid username or password, please try again.'
+        return redirect(url_for("sign_in"))
+    elif session["signin"] and request.method == "GET":
+        return render_template("public_view.html")
+
+@app.route("/sign_in/agent_home", methods=["POST", "GET"])
+def agent_home():
+    session['signin'] = query.sign_in_check(conn, session['email'],session["password"], 'booking_agent','')
+    if not session["signin"] and request.method == 'GET':
+        session["error"] = 'Invalid username or password, please try again.'
+        return redirect(url_for("sign_in"))
+    elif session["signin"] and request.method == "GET":
+        return render_template("public_view.html")
 
 
-
-
+@app.route("/sign_in/staff_home", methods=["POST", "GET"])
+def staff_home():
+    session['signin'] = query.sign_in_check(conn, session['email'],session["password"], 'booking_agent',session['airline_name'])
+    if not session["signin"] and request.method == 'GET':
+        session["error"] = 'Invalid username or password, please try again.'
+        return redirect(url_for("sign_in"))
+    elif session["signin"] and request.method == "GET":
+        return render_template("public_view.html")
 
 
 if __name__ =='__main__':
