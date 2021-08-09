@@ -117,7 +117,7 @@ def sign_up():
 def signup_cus():
     valid, err = query.reg_validation_cus(conn, session)
     if valid:
-        session['logged_in'] = True
+        session['signin'] = True
         session["user_type"] = 'cus'
         query.add_cus(conn, session)
         return redirect(url_for("customer_home"))
@@ -130,7 +130,7 @@ def signup_ba():
     # Pass the session input information from html to the backend to check whether the address is already in use.
     valid, err = query.reg_validation_ba(conn, session)
     if valid:
-        session['logged_in'] = True
+        session['signin'] = True
         session["user_type"] = 'booking_agent'
         query.add_ba(conn, session)
         return redirect(url_for("agent_home"))
@@ -143,7 +143,7 @@ def signup_as():
     valid, err = query.reg_validation_as(conn, session)
     if valid:
         query.add_as(conn, session)
-        session['logged_in'] = True
+        session['signin'] = True
         session["user_type"] = 'as'
         return redirect(url_for("staff_home"))
     else:

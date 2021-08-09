@@ -74,19 +74,19 @@ def get_airlines(conn):
 
 # the options for searching filter
 # NOT IN USE
-def get_departure_time():
-    d_dic = {
-        'departure_time': [],
-        'arrival_time': []
-    }
-
-    for i in range(len(data)):
-        d_dic['departure_time'].append(str(data[i]['departure_time']))
-        d_dic['arrival_time'].append(str(data[i]['arrival_time']))
-
-    # get rid of all the duplicate elements
-    d_dic['departure_time'] = remove_duplicate(d_dic['CHANGE'])
-    d_dic['arrival_time'] = remove_duplicate(d_dic['CHANGE'])
+# def get_departure_time():
+#     d_dic = {
+#         'departure_time': [],
+#         'arrival_time': []
+#     }
+#
+#     for i in range(len(data)):
+#         d_dic['departure_time'].append(str(data[i]['departure_time']))
+#         d_dic['arrival_time'].append(str(data[i]['arrival_time']))
+#
+#     # get rid of all the duplicate elements
+#     d_dic['departure_time'] = remove_duplicate(d_dic['CHANGE'])
+#     d_dic['arrival_time'] = remove_duplicate(d_dic['CHANGE'])
 
 
 
@@ -131,7 +131,7 @@ def get_purchased_flight(conn,session):
     query ='select * from flight where flight_num in (select flight_num from ticket, purchase ' \
            'where ticket.ticket_id = purchase.ticket_id and %s = \'%s\')'
     if session["user_type"] == 'customer':
-
+        pass
     if session["user_type"] == 'booking_agent':
         pass
     if session["user_type"] == 'customer':
