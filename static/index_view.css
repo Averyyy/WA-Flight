@@ -93,3 +93,11 @@ top: 100pt;
   left: 0px;
   text-shadow: 5px 0px #f41fbf, 6px 1px #f41fbf, 7px 2px #f41fbf, 8px 3px #f41fbf, 9px 4px #f41fbf, 10px 5px #f41fbf, 11px 6px #f41fbf, 12px 7px #f41fbf, 13px 8px #f41fbf, 14px 9px #f41fbf, 15px 10px #f41fbf;
 }
+
+.error{
+  display: block;
+  font-size: 30px;
+  font-family: fantasy;
+  position: absolute;
+  left: 0
+}

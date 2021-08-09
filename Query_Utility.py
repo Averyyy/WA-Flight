@@ -128,20 +128,22 @@ def filter_result(conn,html_get):
 
 # ===========================================================================================
 #sign in
-
-def login_check(conn, username, password, role):
-    cursor = conn.cursor(prepared=True)
+def sign_in_check(conn, username, password,role, airline_name):
+    cursor = conn.cursor()
+    # username = username.replace('\'', '\\\'')
     query = """SELECT password FROM %s WHERE """ % role
     if role == "airline_staff":
-        query += """username = %s"""
+        query += """username = \'%s\'""" % username
+        query += """ AND airline_name = \'%s\' """ %airline_name
     else:
-        query += """email = %s"""
-    cursor.execute(query, (username.replace("\'", "\'\'"),))
+        query += """email = \'%s\'""" % username
+    cursor.execute(query)
     data = cursor.fetchall()
     cursor.close()
     if not data:
         return False
-    return check_password_hash(data[0][0], password)
+    # return check_password_hash(data[0][0], password)
+    return data[0]['password'] == password
 
 def reg_validation_cus(conn,info):
 

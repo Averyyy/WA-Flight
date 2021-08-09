@@ -161,10 +161,10 @@ def signup_as():
 @app.route("/sign_in", methods=['GET', 'POST'])
 def sign_in():
     if request.method =='GET':
+        error = session.get('error')
         airlines = query.get_airlines(conn)
-        print(airlines)
         return render_template("signin.html",
-                               airlines = airlines)
+                               airlines = airlines, error = error)
     if request.method == 'POST':
         info_cus = {
             "email": request.form.get("uname"),
@@ -184,7 +184,6 @@ def sign_in():
             return redirect(url_for("customer_home"))
         elif query.check_full(info_ba):
             save_to_session(info_ba)
-            print('session',session.get('email'))
             return redirect(url_for("agent_home"))
         elif query.check_full(info_as):
             save_to_session(info_as)
@@ -192,23 +191,31 @@ def sign_in():
 
 @app.route("/sign_in/customer_home", methods=["POST", "GET"])
 def customer_home():
-    pass
-
+    session['signin'] = query.sign_in_check(conn, session['email'],session["password"], 'customer','')
+    if not session["signin"] and request.method == 'GET':
+        session["error"] = 'Invalid username or password, please try again.'
+        return redirect(url_for("sign_in"))
+    elif session["signin"] and request.method == "GET":
+        return render_template("public_view.html")
 
 @app.route("/sign_in/agent_home", methods=["POST", "GET"])
 def agent_home():
-    pass
+    session['signin'] = query.sign_in_check(conn, session['email'],session["password"], 'booking_agent','')
+    if not session["signin"] and request.method == 'GET':
+        session["error"] = 'Invalid username or password, please try again.'
+        return redirect(url_for("sign_in"))
+    elif session["signin"] and request.method == "GET":
+        return render_template("public_view.html")
+
 
 @app.route("/sign_in/staff_home", methods=["POST", "GET"])
 def staff_home():
-    pass
-
-
-
-
-
-
-
+    session['signin'] = query.sign_in_check(conn, session['email'],session["password"], 'booking_agent',session['airline_name'])
+    if not session["signin"] and request.method == 'GET':
+        session["error"] = 'Invalid username or password, please try again.'
+        return redirect(url_for("sign_in"))
+    elif session["signin"] and request.method == "GET":
+        return render_template("public_view.html")
 
 
 if __name__ =='__main__':
