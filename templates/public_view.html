@@ -35,9 +35,15 @@
         </li> -->
       </ul>
       <form class="d-flex" >
-        <button class="btn btn-outline-success" type="submit" style="margin-right: 10pt; color = white;"
-				 onclick="window.location.href="{{ url_for("sign_in")}}"">Sign in</button>
-				<button class="btn btn-outline-success" type="submit" >Sign up</button>
+        <form class="d-flex" >
+		<a href="{{ url_for("sign_up") }}">
+        	<input type = 'button' class="btn btn-outline-success"  style="margin-right: 10pt; color = white;" value="Sign up"/>
+		</a>
+		<a href="{{ url_for("sign_in") }}">
+        <input type = 'button' class="btn btn-outline-success"  style="margin-right: 10pt; color = white;" value="Sign in"/>
+		</a>
+ </form>
+
       </form>
     </div>
   </div>
