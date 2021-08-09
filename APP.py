@@ -27,6 +27,7 @@ conn = pymysql.connect(host= 'localhost',
 # Utility Functions
 def save_to_session(dic):
     for key in dic.keys():
+        print(key,dic[key])
         session[key] = dic[key]
     return
 
@@ -172,11 +173,13 @@ def sign_in():
             "password": request.form.get("as_psw"),
             "airline_name": request.form.get("airline_name")
         }
+        print(info_ba)
         if query.check_full(info_cus):
             save_to_session(info_cus)
             return redirect(url_for("customer_home"))
         elif query.check_full(info_ba):
             save_to_session(info_ba)
+            print('ha')
             return redirect(url_for("agent_home"))
         elif query.check_full(info_as):
             save_to_session(info_as)
@@ -193,6 +196,7 @@ def customer_home():
 
 @app.route("/sign_in/agent_home", methods=["POST", "GET"])
 def agent_home():
+    print("agent")
     session['signin'] = query.sign_in_check(conn, session['email'],session["password"], 'booking_agent','')
     if not session["signin"] and request.method == 'GET':
         session["error"] = 'Invalid username or password, please try again.'
@@ -203,7 +207,7 @@ def agent_home():
 
 @app.route("/sign_in/staff_home", methods=["POST", "GET"])
 def staff_home():
-    session['signin'] = query.sign_in_check(conn, session['email'],session["password"], 'booking_agent',session['airline_name'])
+    session['signin'] = query.sign_in_check(conn, session['email'],session["password"], 'airline_staff',session['airline_name'])
     if not session["signin"] and request.method == 'GET':
         session["error"] = 'Invalid username or password, please try again.'
         return redirect(url_for("sign_in"))
