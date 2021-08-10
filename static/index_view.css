@@ -142,7 +142,7 @@ font-weight: 400;
 .containertable {
   text-align: center;
 	position: absolute;
-  	left: 45%;
+  	left: 46%;
   	top: 450pt;
   	bottom: 0;
     margin: auto;
@@ -253,7 +253,7 @@ tbody td:hover:before {
   display: block;
   /* float: left; */
   position: absolute;
-  top: 200pt;
+  top: 185pt;
   left:-100pt;
   transform: scale(0.65);
 }
