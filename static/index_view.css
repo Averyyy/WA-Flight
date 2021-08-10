@@ -82,6 +82,13 @@ font-weight: 400;
 #ugly{
   display: none;
 }
+.commission{
+  display: block;
+  font-size: 10pt;
+  position: absolute;
+  left: 80%;
+  top: 100pt
+}
 .table{
   position: absolute;
   top: 400pt;

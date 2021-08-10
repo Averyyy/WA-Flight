@@ -248,12 +248,17 @@ def agent_home():
         data_dic = query.public_view(conn)
         locations = query.get_locations(conn)
         purchased_flight = query.get_purchased_flight(conn, session)
-        return render_template('homepage_customer.html',
+        total_month = query.view_commission_month(conn, session)[0][0:]
+        avg_month = query.view_commission_month(conn, session)[1]
+        return render_template('homepage_booking_agent.html',
                                # same results as
                                departure_city=locations['departure_loc'],
                                arrival_city=locations['arrival_loc'],
                                all=data_dic,
-                               purchased=purchased_flight)
+                               purchased=purchased_flight,
+                               total_month = total_month,
+                               avg_month = avg_month
+        )
 
 
 @app.route("/sign_in/staff_home", methods=["POST", "GET"])

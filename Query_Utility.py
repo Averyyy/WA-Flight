@@ -176,8 +176,8 @@ def formatting_date(year,month,date):
 
 def getting_period(day):
     print(type(day))
-    start = '%s 00:00:00'%day
-    end = '%s 23:59:59'%day
+    start = '%s 00:00:00'%str(day)
+    end = '%s 23:59:59'%str(day)
     return start, end
 
 def getting_past_month_period(year,month,day):
@@ -377,6 +377,23 @@ def add_as(conn, session):
 
 
 # agent
+def view_commission_month(conn, session):
+    # print(getting_past_month_period(getting_date()[0],getting_date()[1],getting_date()[2])[0],  getting_past_month_period(getting_date()[0],getting_date()[1],getting_date()[2])[1])
+    query = 'SELECT SUM(flight.price)*0.1 as total, SUM(flight.price)*0.1/COUNT(purchases.ticket_id) as avg, COUNT(purchases.ticket_id) AS num '\
+            'FROM flight, ticket, purchases '\
+            'WHERE flight.flight_num = ticket.flight_num AND purchases.ticket_id = ticket.ticket_id '\
+            'AND ticket.ticket_id in (select ticket_id '\
+            'from purchases '\
+            'where booking_agent_email = \'%s\' '\
+            'and purchase_date between \'%s\' and \'%s\');'%(session["email"],  getting_past_month_period(getting_date()[0],getting_date()[1],getting_date()[2])[0],  getting_past_month_period(getting_date()[0],getting_date()[1],getting_date()[2])[1])
+    cursor = conn.cursor()
+    cursor.execute(query)
+    data = cursor.fetchall()
+    total = data[0]['total']
+    avg = data[0]['avg']
+    print(total, avg)
+    return total, avg
+
 
 # staff
 def get_top5_number(conn):
