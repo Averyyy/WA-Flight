@@ -52,16 +52,16 @@ font-weight: 400;
   top: 200pt;
 
 }
-#airline{
+#Customer{
   position: absolute;
   left: 15%;
-  top: auto;
+  top: 140pt;
   width: 100pt;
 }
 #flight_num{
   position: absolute;
   left: 30%;
-  top: auto;
+  top: 140pt;
   width: 150pt;
 }
 #Purchase{
