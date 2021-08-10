@@ -46,6 +46,21 @@ font-weight: 400;
   top: 200pt;
 
 }
+#airline{
+  position: absolute;
+  left: 15%;
+  top: auto;
+  width: 100pt;
+}
+#flight_num{
+  position: absolute;
+  left: 30%;
+  top: auto;
+  width: 150pt;
+}
+#Purchase{
+  left: 60%;
+}
 #date{
   position: absolute;
   width: 150pt;
@@ -234,7 +249,11 @@ tbody td:hover:before {
   background-color: rgba(255, 255, 255, 0.2);
   z-index: -1;
 }
-
+#history{
+  display: block;
+  position: absolute;
+  top: auto;
+}
 /* button */
 button, button::after {
   width: 380px;
