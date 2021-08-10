@@ -9,20 +9,20 @@ import pprint
 
 app = Flask(__name__)
 app.secret_key = "NK3K"
-# conn = pymysql.connect(host= '127.0.0.1',
-#                        user='Wendy',
-#                        password = '12345',
-#                        port = 3307,
-#                        db='Project',
-#                        charset='utf8mb4',
-#                        cursorclass=pymysql.cursors.DictCursor)
-
-conn = pymysql.connect(host= 'localhost',
-                       user='root',
-                       password = '',
+conn = pymysql.connect(host= '127.0.0.1',
+                       user='Wendy',
+                       password = '12345',
+                       port = 3307,
                        db='fly',
                        charset='utf8mb4',
                        cursorclass=pymysql.cursors.DictCursor)
+
+# conn = pymysql.connect(host= 'localhost',
+#                        user='root',
+#                        password = '',
+#                        db='fly',
+#                        charset='utf8mb4',
+#                        cursorclass=pymysql.cursors.DictCursor)
 
 # Utility Functions
 def save_to_session(dic):

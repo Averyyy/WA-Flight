@@ -69,7 +69,7 @@
 
 			<!--			Where from:<br>-->
 			<div class="form__group field" id='from'>
-				<input type="input" class="form__field" placeholder="Departure"  list="list1"  autocomplete="off" name="from" required />
+				<input type="input" class="form__field" placeholder="Departure"  list="list1"  autocomplete="off" name="from" />
 				<label for="from" class="form__label">Departure</label>
 				<datalist id="list1">
 					{% for i in departure_city %}
@@ -81,7 +81,7 @@
 
 			<!--			To City:<br>-->
 			<div class="form__group field"  id='to'>
-				<input type="input" class="form__field" placeholder="Arrival"  list="list2"  autocomplete="off" name="to" required />
+				<input type="input" class="form__field" placeholder="Arrival"  list="list2"  autocomplete="off" name="to" />
 				<label for="from" class="form__label">Arrival</label>
 			<datalist id="list2">
 				{% for i in arrival_city %}
@@ -91,7 +91,7 @@
 				</div>
 
 				<div class="form__group field" id='date'>
-					<input type="date" class="form__field" placeholder="" name="date" required />
+					<input type="date" class="form__field" placeholder="" name="date" />
 					<label for="from" class="form__label">Departure_time</label>
 					</div>
 

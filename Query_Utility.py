@@ -83,6 +83,27 @@ def get_flight_num(conn):
         flight_num.append(str(data[i]['flight_num']))
     return flight_num
 
+
+# ======== Start of day time formatting fuction
+def getting_date():
+    now = str(datetime.datetime.now()).split()[0]
+    temp = now.split('-')
+    date = temp[2]
+    month = temp[1]
+    year = temp[0]
+    return (date,month,year)
+
+def formatting_date(date, month, year):
+    str = '%s-%s-%s'%(year,month,date)
+    return str
+
+def getting_period(day):
+    print(type(day))
+    start = '%s 00:00:00'%day
+    end = '%s 23:59:59'%day
+    return start, end
+
+# ======== End of day time formatting fuction
 # the options for searching filter
 # NOT IN USE
 # def get_departure_time():
@@ -259,7 +280,26 @@ def add_as(conn, session):
 
 # ======== End of sign up
 
+# Start of Homepage utility function
+def get_top5_number(conn):
+    # need to insert time constrain using utility function
+    query = 'select booking_agent_email, count(*) as ct from purchases ' \
+            'where booking_agent_email is not null ' \
+            'group by booking_agent_email ' \
+            'order by ct DESC limit 5;'
+    cursor = conn.cursor()
+    cursor.execute(query)
+    data = cursor.fetchall()
+    data_list = [['Booking Agent','# Purchased']]
+    for i in range(len(data)):
+        data_list.append([data[i]['booking_agent_email'],data[i]['ct']])
+    cursor.close()
+    print(data_list)
+    return data_list
 
+
+
+# End of homepage utility function
 def check_full(dic):
     for key in dic.keys():
         print(key, dic[key])
