@@ -9,20 +9,20 @@ import pprint
 
 app = Flask(__name__)
 app.secret_key = "NK3K"
-# conn = pymysql.connect(host= '127.0.0.1',
-#                        user='Wendy',
-#                        password = '12345',
-#                        port = 3307,
-#                        db='fly',
-#                        charset='utf8mb4',
-#                        cursorclass=pymysql.cursors.DictCursor)
-
-conn = pymysql.connect(host= 'localhost',
-                       user='root',
-                       password = '',
+conn = pymysql.connect(host= '127.0.0.1',
+                       user='Wendy',
+                       password = '12345',
+                       port = 3307,
                        db='fly',
                        charset='utf8mb4',
                        cursorclass=pymysql.cursors.DictCursor)
+
+# conn = pymysql.connect(host= 'localhost',
+#                        user='root',
+#                        password = '',
+#                        db='fly',
+#                        charset='utf8mb4',
+#                        cursorclass=pymysql.cursors.DictCursor)
 
 # Utility Functions
 def save_to_session(dic):
@@ -190,6 +190,7 @@ def customer_home():
     session["user_type"] = 'customer'
     print(session.get('user_type'))
     locations = query.get_locations(conn)
+    d = query.get_top5_number(conn)
     if not session["signin"] and request.method == 'GET':
         session["error"] = 'Invalid username or password, please try again.'
         return redirect(url_for("sign_in"))
@@ -203,7 +204,8 @@ def customer_home():
                                all=data_dic,
                                purchased = purchased_flight,
                                airlines = query.get_airlines(conn),
-                               flight_num = query.get_flight_num(conn))
+                               flight_num = query.get_flight_num(conn),
+                               data_list = d)
                                # spent = query.get_spent(query.get_past_year_period())))
     elif request.method =='POST':
         html_get = {'from': request.form.get('from'),
@@ -213,7 +215,7 @@ def customer_home():
         print(html_get)
         data_dic = query.filter_result(conn, html_get)
         purchased_flight = query.get_purchased_flight(conn, session)
-        d = query.get_top5_number(conn)
+
         flight_num = html_get["flight_num"]
         if flight_num == '':
             return render_template('homepage_customer.html',
