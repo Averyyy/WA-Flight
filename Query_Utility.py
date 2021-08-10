@@ -4,6 +4,7 @@ import datetime
 import time
 from flask import Flask, render_template, request, session, redirect, url_for
 import pprint
+import random
 
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -74,7 +75,7 @@ def get_airlines(conn):
 
 def get_flight_num(conn):
     cursor = conn.cursor()
-    query = "select distinct flight_num from flight"
+    query = "select distinct flight_num from flight where status = \'upcoming\'"
     cursor.execute(query)
     data = cursor.fetchall()
     cursor.close()
@@ -83,6 +84,81 @@ def get_flight_num(conn):
         flight_num.append(str(data[i]['flight_num']))
     return flight_num
 
+# ======== Start of purchase function
+
+def existing_ticket_id(conn):
+    cursor = conn.cursor()
+    query = "select ticket_id from ticket"
+    cursor.execute(query)
+    data = cursor.fetchall()
+    cursor.close()
+    ticket_id = []
+    for i in range(len(data)):
+        ticket_id.append(str(data[i]['ticket_id']))
+    print('check existing_ticket_id excecuted, ticket_id list: ', ticket_id)
+    return ticket_id
+
+
+# ticket_id generator
+def random_ticket_id(conn):
+    seed1 = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    seed2 = '1234567890'
+    ticket_id = ''
+    for i in range(2):
+        ticket_id +=random.choice(seed1)
+    for k in range(3):
+        ticket_id += random.choice(seed2)
+    #   logic check to see if ticket_id already exists
+    if ticket_id not in existing_ticket_id(conn):
+        print('generated random ticket id:', ticket_id)
+        return ticket_id
+    else:
+        random_ticket_id(conn)
+
+def get_airline(conn, flight_num):
+    cursor = conn.cursor()
+    query = "select airline_name from flight where flight_num =\'%s\'"%flight_num
+    cursor.execute(query)
+    airline = cursor.fetchall()[0]['airline_name']
+    cursor.close()
+    print('airline got is:', airline)
+    return airline
+
+
+def purchase(conn, flight_num, customer_email, booking_agent_email = 'NULL'):
+    success, err = False, ''
+    # TODO!!! check whether the selected flight is full
+
+
+    # insert data into ticket （ticket_id, airline_name, flight_num）
+    cursor = conn.cursor()
+    ticket_id = random_ticket_id(conn)
+    airline_name = get_airline(conn, flight_num)
+    query = 'insert into ticket values' \
+            '(\'%s\',\'%s\',\'%s\')' % (ticket_id,airline_name, flight_num)
+    print(query)
+    cursor.execute(query)
+    conn.commit()
+    cursor.close()
+
+    # insert data into purchases (ticket_id, customer_email, booking_agent_email, purchase date)
+    cursor = conn.cursor()
+    year, month, day = getting_date()
+    purchase_date = formatting_date(year, month, day)
+    print('formatted date',purchase_date)
+    if booking_agent_email != 'Null':
+        query = 'insert into purchases values' \
+            '(\'%s\',\'%s\',\'%s\',\'%s\')' % (ticket_id, customer_email, booking_agent_email,purchase_date)
+    else:
+        query = 'insert into purchases values' \
+                '(\'%s\',\'%s\',%s,\'%s\')' % (ticket_id, customer_email, booking_agent_email, purchase_date)
+    print(query)
+    cursor.execute(query)
+    conn.commit()
+    cursor.close()
+    success = True
+    print(success, err)
+    return success, err
 
 # ======== Start of day time formatting fuction
 def getting_date():
@@ -91,9 +167,10 @@ def getting_date():
     date = temp[2]
     month = temp[1]
     year = temp[0]
-    return (date,month,year)
+    return year,month,date
+    '''noted that the return is str type not int type!'''
 
-def formatting_date(date, month, year):
+def formatting_date(year,month,date):
     str = '%s-%s-%s'%(year,month,date)
     return str
 
@@ -102,6 +179,18 @@ def getting_period(day):
     start = '%s 00:00:00'%day
     end = '%s 23:59:59'%day
     return start, end
+
+def getting_past_month_period(year,month,day):
+    start = '%s 00:00:00'%(formatting_date(year,str(int(month)-1),str(int(day)+1)))
+    end = '%s 23:59:59'%(formatting_date(year,month,day))
+    return start, end
+# print(getting_past_month_period('2021','8','10'))
+
+def getting_past_year_period(year,month,day):
+    start = '%s 00:00:00'%(formatting_date(str(int(month)-1),month,day))
+    end = '%s 23:59:59'%(formatting_date(year,month,day))
+    return start, end
+# print(getting_past_year_period(getting_date()))
 
 # ======== End of day time formatting fuction
 # the options for searching filter
@@ -125,7 +214,7 @@ def getting_period(day):
 def public_view(conn):
     # From query fetch all
     cursor=conn.cursor()
-    query = "select * from flight"
+    query = "select * from flight where status = \'upcoming\'"
     cursor.execute(query)
     data = cursor.fetchall()
     cursor.close()
@@ -136,19 +225,21 @@ def public_view(conn):
     return data
 
 def filter_result(conn,html_get):
-    # html_get is a list from user filter input, it can have multiple results or it can be empty
-    # in the Flask html_get = {'from':request.form['from'],
-    #                     'to':request.form['to'],
-    #                     'dt':request.form['departure']} -- Shanghai | PVG
     query = "select * from flight where"
-    if html_get['from']:
+    if html_get['from'] and html_get['from'] != None:
         html_get['departure_airport'] = html_get['from'].split('|')[1].strip()
-        query += ' %s = \'%s\' '% ('departure_airport', html_get['departure_airport'])
-    if html_get['to']:
+        query += ' status = \'upcoming\' and %s = \'%s\''% ('departure_airport', html_get['departure_airport'])
+    if html_get['to'] and html_get['to'] != None:
         html_get['arrival_airport'] = html_get['to'].split('|')[1].strip()
-        query += 'and %s =\'%s\' ' % ('arrival_airport', html_get['arrival_airport'])
-    if html_get['dt'] != '':
-        query += 'and %s = \'%s\'' % ('dt', html_get['dt'])
+        query += ' and %s =\'%s\'' % ('arrival_airport', html_get['arrival_airport'])
+    if html_get['dt'] != '' and html_get['dt'] != None :
+        print(html_get['dt'])
+        start, end = getting_period(html_get['dt'])
+        print(start, end)
+        query += ' and %s between \'%s\' and \'%s\'' % ('departure_time', start, end)
+    if (html_get['from'] == '' or html_get['from'] is None) and (html_get['to']== '' or html_get['to'] is None) and (html_get['dt']== '' or html_get['dt'] is None):
+        query += ' status = \'upcoming\''
+    print(query)
     cursor = conn.cursor()
     cursor.execute(query)
     data = cursor.fetchall()
@@ -281,6 +372,13 @@ def add_as(conn, session):
 # ======== End of sign up
 
 # Start of Homepage utility function
+
+# customer
+
+
+# agent
+
+# staff
 def get_top5_number(conn):
     # need to insert time constrain using utility function
     query = 'select booking_agent_email, count(*) as ct from purchases ' \

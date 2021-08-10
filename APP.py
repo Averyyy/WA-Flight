@@ -189,14 +189,14 @@ def customer_home():
     session['signin'] = query.sign_in_check(conn, session['email'],session["password"], 'customer','')
     session["user_type"] = 'customer'
     print(session.get('user_type'))
+    locations = query.get_locations(conn)
+    d = query.get_top5_number(conn)
     if not session["signin"] and request.method == 'GET':
         session["error"] = 'Invalid username or password, please try again.'
         return redirect(url_for("sign_in"))
     elif session["signin"] and request.method == "GET":
         data_dic = query.public_view(conn)
-        locations = query.get_locations(conn)
         purchased_flight = query.get_purchased_flight(conn, session)
-        d = query.get_top5_number(conn)
         return render_template('homepage_customer.html',
                                # same results as
                                departure_city=locations['departure_loc'],
@@ -206,6 +206,35 @@ def customer_home():
                                airlines = query.get_airlines(conn),
                                flight_num = query.get_flight_num(conn),
                                data_list = d)
+                               # spent = query.get_spent(query.get_past_year_period())))
+    elif request.method =='POST':
+        html_get = {'from': request.form.get('from'),
+                    'to': request.form.get('to'),
+                    'dt': request.form.get('date'),
+                    'flight_num':request.form.get("flight_num")}
+        print(html_get)
+        data_dic = query.filter_result(conn, html_get)
+        purchased_flight = query.get_purchased_flight(conn, session)
+
+        flight_num = html_get["flight_num"]
+        if flight_num == '':
+            return render_template('homepage_customer.html',
+                               # same results as
+                               departure_city=locations['departure_loc'],
+                               arrival_city=locations['arrival_loc'],
+                               all=data_dic,
+                               purchased = purchased_flight,
+                               airlines = query.get_airlines(conn),
+                               flight_num = query.get_flight_num(conn),
+                               data_list = d)
+
+        else:
+
+            success,err = query.purchase(conn, flight_num, session['email'])
+            if success:
+                return redirect(url_for("init_app"))
+            else:
+                return redirect(url_for('sign_up'))
 
 
 @app.route("/sign_in/agent_home", methods=["POST", "GET"])
