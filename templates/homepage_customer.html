@@ -2,8 +2,15 @@
 <html>
 
 <head>
+
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 	<link rel="stylesheet" href="../static/index_view.css" />
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+		google.charts.load('current', {
+				packages: ['corechart']
+		});
+</script>
 	<header id='header'>
 		<nav class="navbar navbar-expand-lg navbar-light bg-light"  >
 			<div class="container-fluid" >
@@ -49,6 +56,12 @@
 <a href="{{ url_for("sign_up") }}">Sign up  </a>
 <a href="{{ url_for("sign_in") }}">  Sign in</a>
 </div> -->
+	 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', {
+            packages: ['corechart']
+        });
+    </script>
 
 </head>
 
@@ -124,9 +137,9 @@
 
 					<button id = 'Purchase'><input type="submit" value='Purchase' /id = 'ugly' class="search">Purchase</button>
 
-		<div class="form__group field"  id='airline'>
-		<input type="input" class="form__field" placeholder="Airline:"  list="list3"  autocomplete="off" name="to" required />
-		<label for="from" class="form__label">Airline:</label>
+		<div class="form__group field"  id='ugly'>
+		<input type="input" class="form__field" placeholder="Customer:"  list="list3"  autocomplete="off" name="to" required />
+		<label for="from" class="form__label">Customer:</label>
 		<datalist id="list3">
 			{% for i in airlines %}
 			<option>{{ i }}</option>
@@ -179,7 +192,31 @@
 		</table>
 	</div>
 
-<!-- </div> -->
+	{% if data_list %}
+	{% set d = data_list %}
+
+
+	    <div id="container" style="width: 550px; height: 400px; margin: 0 auto; display:block; background:transparent; position:absolute; left:25pt; top:500pt;"></div>
+	    <script language="JavaScript">
+	        function drawChart() {
+	            var data = google.visualization.arrayToDataTable({{data_list|safe}})
+	            var options = {
+	                title: 'Page visit per year',
+	                isStacked: true,
+									    // backgroundColor: '#E4E4E4',
+									is3D: true,
+									backgroundColor: {
+        fill: '#FF0000',
+        fillOpacity: 0
+      },
+	            };
+	            /Instantiate and draw the chart.*/
+	            var chart = new google.visualization.BarChart(document.getElementById('container'));
+	            chart.draw(data, options);
+	        }
+	        google.charts.setOnLoadCallback(drawChart);
+	    </script>
+	{% endif %}
 
 
 

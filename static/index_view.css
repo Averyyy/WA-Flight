@@ -1,6 +1,6 @@
-<style>
 @import url('https://fonts.googleapis.com/css2?family=Lato:ital@0;1&display=swap');
-</style>
+@import url('https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@1,600&display=swap');
+
 *{
   font-family: 'Lato', sans-serif;
 /* background-image: linear-gradient(to top, #feada6 0%, #f5efef 100%); */
@@ -12,6 +12,12 @@ body {
 background-image: linear-gradient(to top, #5ee7df 0%, #b490ca 100%);
 background-size:cover;
 background-attachment:fixed;
+}
+.bye{
+  font-family: 'Titillium Web', sans-serif;
+  font-size: 50pt;
+  color: black;
+
 }
 
 #header{
@@ -146,6 +152,7 @@ font-weight: 400;
   	top: 450pt;
   	bottom: 0;
     margin: auto;
+
 	transform: translate(-50%, -50%);
 }
 .form__group {
@@ -261,7 +268,7 @@ tbody td:hover:before {
   display: block;
   position: absolute;
   top: 250pt;
-  left: 400pt;
+  left: 46%;
   transform: scale(0.9);
 
 }

@@ -196,6 +196,7 @@ def customer_home():
         data_dic = query.public_view(conn)
         locations = query.get_locations(conn)
         purchased_flight = query.get_purchased_flight(conn, session)
+        d = query.get_top5_number(conn)
         return render_template('homepage_customer.html',
                                # same results as
                                departure_city=locations['departure_loc'],
@@ -203,7 +204,8 @@ def customer_home():
                                all=data_dic,
                                purchased = purchased_flight,
                                airlines = query.get_airlines(conn),
-                               flight_num = query.get_flight_num(conn))
+                               flight_num = query.get_flight_num(conn),
+                               data_list = d)
 
 
 @app.route("/sign_in/agent_home", methods=["POST", "GET"])
