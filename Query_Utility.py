@@ -124,18 +124,46 @@ def get_airline(conn, flight_num):
     print('airline got is:', airline)
     return airline
 
+def get_seats(conn, flight_num):
+    cursor = conn.cursor()
+    query = "select seats from airplane where airplane_id= " \
+            "(select airplane_id from flight where flight_num= \'%s\' );" % flight_num
+    cursor.execute(query)
+    seats = cursor.fetchall()[0]['seats']
+    cursor.close()
+    print('airline got is:', seats)
+    return seats
+
+
+def ticket_sold(conn, flight_num):
+    cursor = conn.cursor()
+    query = "select COUNT(*) as ct from ticket" \
+            " where flight_num = \'%s\';" % flight_num
+    cursor.execute(query)
+    ticket_sold = cursor.fetchall()[0]['ct']
+    cursor.close()
+    print('airline got is:', ticket_sold)
+    return ticket_sold
 
 def purchase(conn, flight_num, customer_email, booking_agent_email = 'NULL'):
     success, err = False, ''
+    # logic: the airline airplane the selected flight_num is using should <=
+    # the ticket num sold
     # TODO!!! check whether the selected flight is full
 
+    seats = get_seats(conn, flight_num)
+    sold = ticket_sold(conn, flight_num)
+    print(seats, sold)
+    if seats <= sold:
+        err = 'Sorry, the plane is currently full.'
+        return success, err
 
     # insert data into ticket （ticket_id, airline_name, flight_num）
     cursor = conn.cursor()
     ticket_id = random_ticket_id(conn)
     airline_name = get_airline(conn, flight_num)
     query = 'insert into ticket values' \
-            '(\'%s\',\'%s\',\'%s\')' % (ticket_id,airline_name, flight_num)
+            '(\'%s\',\'%s\',\'%s\')' % (ticket_id, airline_name, flight_num)
     print(query)
     cursor.execute(query)
     conn.commit()
@@ -160,7 +188,7 @@ def purchase(conn, flight_num, customer_email, booking_agent_email = 'NULL'):
     print(success, err)
     return success, err
 
-# ======== Start of day time formatting fuction
+# ======== Start of day time formatting function
 def getting_date():
     now = str(datetime.datetime.now()).split()[0]
     temp = now.split('-')
@@ -181,16 +209,18 @@ def getting_period(day):
     return start, end
 
 def getting_past_month_period(year,month,day):
-    start = '%s 00:00:00'%(formatting_date(year,str(int(month)-1),str(int(day)+1)))
-    end = '%s 23:59:59'%(formatting_date(year,month,day))
+    start = '%s'%(formatting_date(year,str(int(month)-1),str(int(day)+1)))
+    end = '%s'%(formatting_date(year,month,day))
     return start, end
 # print(getting_past_month_period('2021','8','10'))
 
+
 def getting_past_year_period(year,month,day):
-    start = '%s 00:00:00'%(formatting_date(str(int(month)-1),month,day))
-    end = '%s 23:59:59'%(formatting_date(year,month,day))
+    start = '%s'%(formatting_date(str(int(year)-1),month,day))
+    end = '%s'%(formatting_date(year,month,day))
     return start, end
-# print(getting_past_year_period(getting_date()))
+# print(getting_past_month_period('2021','8','10'))
+
 
 # ======== End of day time formatting fuction
 # the options for searching filter

@@ -154,7 +154,6 @@ def signup_as():
 
 @app.route("/sign_in", methods=['GET', 'POST'])
 def sign_in():
-
     if request.method =='GET':
         error = session.get('error')
         airlines = query.get_airlines(conn)
@@ -241,19 +240,54 @@ def customer_home():
 def agent_home():
     session['signin'] = query.sign_in_check(conn, session['email'],session["password"], 'booking_agent','')
     session["user_type"] = 'booking_agent'
+    locations = query.get_locations(conn)
+    d = query.get_top5_number(conn)
     if not session["signin"] and request.method == 'GET':
-        session["error"] = 'Invalid username or password, please try again.'
+        session["error"] = 'Invalid usernme or password, please try again.'
         return redirect(url_for("sign_in"))
     elif session["signin"] and request.method == "GET":
         data_dic = query.public_view(conn)
-        locations = query.get_locations(conn)
         purchased_flight = query.get_purchased_flight(conn, session)
         return render_template('homepage_customer.html',
                                # same results as
                                departure_city=locations['departure_loc'],
                                arrival_city=locations['arrival_loc'],
                                all=data_dic,
-                               purchased=purchased_flight)
+                               purchased=purchased_flight,
+                               airlines=query.get_airlines(conn),
+                               flight_num=query.get_flight_num(conn),
+                               data_list=d)
+    elif request.method =='POST':
+        html_get = {'from': request.form.get('from'),
+                    'to': request.form.get('to'),
+                    'dt': request.form.get('date'),
+                    'flight_num':request.form.get("flight_num"),
+                    # TODO: need to add this tab on html --> agent homepage and align the tag name customer_email
+                    'customer_email':request.form.get("customer_email")}
+        print(html_get)
+        data_dic = query.filter_result(conn, html_get)
+        purchased_flight = query.get_purchased_flight(conn, session)
+        flight_num = html_get["flight_num"]
+        if flight_num == '':
+            return render_template('homepage_customer.html',
+                               # same results as
+                               departure_city=locations['departure_loc'],
+                               arrival_city=locations['arrival_loc'],
+                               all=data_dic,
+                               purchased = purchased_flight,
+                               airlines = query.get_airlines(conn),
+                               flight_num = query.get_flight_num(conn),
+                               data_list = d)
+        else:
+            if html_get['customer_email'] is None or  html_get['customer_email']=='':
+                success, err = False, 'Please enter both flight num and the customer email.'
+            else:
+                success,err = query.purchase(conn, flight_num, html_get['customer_email'],session['email'])
+            if success:
+                return redirect(url_for("agent_home"))
+            else:
+                # TODO: how should we inform customer purchase failure? Inline warning should be fine now.
+                return redirect(url_for('sign_up'))
 
 
 @app.route("/sign_in/staff_home", methods=["POST", "GET"])
