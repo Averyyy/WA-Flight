@@ -295,7 +295,7 @@ def staff_home():
             'arrival': request.form.get('arrplace'),
             'plane': request.form.get('plane')
         }
-        print(create_para)
+
         if query.create_flight(conn, session, create_para['flight_num'], create_para["price"], create_para["departure_time"],create_para['arrival_time'],create_para['departure'][-3:], create_para['arrival'][-3:], create_para['plane']):
             return redirect(url_for('staff_home'))
         else:
