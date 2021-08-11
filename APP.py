@@ -9,20 +9,20 @@ import pprint
 
 app = Flask(__name__)
 app.secret_key = "NK3K"
-conn = pymysql.connect(host= '127.0.0.1',
-                       user='Wendy',
-                       password = '12345',
-                       port = 3307,
-                       db='fly',
-                       charset='utf8mb4',
-                       cursorclass=pymysql.cursors.DictCursor)
-
-# conn = pymysql.connect(host= 'localhost',
-#                        user='root',
-#                        password = '',
+# conn = pymysql.connect(host= '127.0.0.1',
+#                        user='Wendy',
+#                        password = '12345',
+#                        port = 3307,
 #                        db='fly',
 #                        charset='utf8mb4',
 #                        cursorclass=pymysql.cursors.DictCursor)
+
+conn = pymysql.connect(host= 'localhost',
+                       user='root',
+                       password = '',
+                       db='fly',
+                       charset='utf8mb4',
+                       cursorclass=pymysql.cursors.DictCursor)
 
 # Utility Functions
 def save_to_session(dic):
@@ -154,6 +154,7 @@ def signup_as():
 
 @app.route("/sign_in", methods=['GET', 'POST'])
 def sign_in():
+
     if request.method =='GET':
         error = session.get('error')
         airlines = query.get_airlines(conn)
@@ -241,7 +242,8 @@ def agent_home():
     session['signin'] = query.sign_in_check(conn, session['email'],session["password"], 'booking_agent','')
     session["user_type"] = 'booking_agent'
     locations = query.get_locations(conn)
-    d = query.get_top5_number(conn)
+    total_month = query.view_commission_month(conn, session)[0][0:]
+    avg_month = query.view_commission_month(conn, session)[1]
     if not session["signin"] and request.method == 'GET':
         session["error"] = 'Invalid usernme or password, please try again.'
         return redirect(url_for("sign_in"))
@@ -254,9 +256,9 @@ def agent_home():
                                arrival_city=locations['arrival_loc'],
                                all=data_dic,
                                purchased=purchased_flight,
-                               airlines=query.get_airlines(conn),
                                flight_num=query.get_flight_num(conn),
-                               data_list=d)
+                               total_month=total_month,
+                               avg_month=avg_month)
     elif request.method =='POST':
         html_get = {'from': request.form.get('from'),
                     'to': request.form.get('to'),
@@ -275,9 +277,9 @@ def agent_home():
                                arrival_city=locations['arrival_loc'],
                                all=data_dic,
                                purchased = purchased_flight,
-                               airlines = query.get_airlines(conn),
                                flight_num = query.get_flight_num(conn),
-                               data_list = d)
+                               total_month=total_month,
+                               avg_month=avg_month)
         else:
             if html_get['customer_email'] is None or  html_get['customer_email']=='':
                 success, err = False, 'Please enter both flight num and the customer email.'
@@ -287,7 +289,15 @@ def agent_home():
                 return redirect(url_for("agent_home"))
             else:
                 # TODO: how should we inform customer purchase failure? Inline warning should be fine now.
-                return redirect(url_for('sign_up'))
+                return redirect( render_template('homepage_customer.html',
+                               # same results as
+                               departure_city=locations['departure_loc'],
+                               arrival_city=locations['arrival_loc'],
+                               all=data_dic,
+                               purchased = purchased_flight,
+                               flight_num = query.get_flight_num(conn),
+                               total_month=total_month,
+                               avg_month=avg_month)
 
 
 @app.route("/sign_in/staff_home", methods=["POST", "GET"])
