@@ -192,6 +192,8 @@
 		</table>
 	</div>
 
+
+<!-- diagram -->
 	{% if data_list %}
 	{% set d = data_list %}
 
@@ -217,8 +219,9 @@
 	        google.charts.setOnLoadCallback(drawChart);
 	    </script>
 	{% endif %}
-<div class="commission"> Total commission:{{total_month}} <br>
-	Average commission: {{avg_month}} </div>
+<div class="commission"> Total commission(Month):{{total_month}} <br>
+	Average commission(Month): {{avg_month}} <br> Total commission(Year):{{total_year}} <br>
+		Average commission(Year): {{avg_year}}</div>
 
 
 

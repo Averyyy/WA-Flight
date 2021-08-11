@@ -107,7 +107,7 @@
           <input type="password" placeholder="Enter Password" name="as_psw" >
 
           <b>Air Line</b>
-          <input type="text" name="to" list='list1' placeholder="Select">
+          <input type="text" name="airline_name" list='list1' placeholder="Select">
           <datalist id="list1">
             {% for i in airlines %}
             <option>{{ i }}</option>
@@ -119,7 +119,7 @@
             <input type="checkbox" checked="checked" name="remember"> Remember me
           </label>
         </div>
-        
+
         {% if error%}
         <div class="error">
           {{error}}

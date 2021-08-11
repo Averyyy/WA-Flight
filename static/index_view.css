@@ -74,11 +74,48 @@ font-weight: 400;
   top: 200pt;
 
 }
+#price{
+  position: absolute;
+  width: 80pt;
+  left: 22%;
+  top: 140pt;
+}
+#depdate{
+  position: absolute;
+  width: 85pt;
+  left: 28%;
+  top: 140pt;
+}
+#arrdate{
+  position: absolute;
+  width: 85pt;
+  left: 35%;
+  top: 140pt;
+}
+#dep_c{
+  position: absolute;
+  width: 85pt;
+  left: 43%;
+  top: 140pt;
+}
+#arr_c{
+  position: absolute;
+  width: 85pt;
+  left: 50%;
+  top: 140pt;
+}
+#plane{
+  position: absolute;
+  width: 85pt;
+  left: 58%;
+  top: 140pt;
+}
 #search{
   position: absolute;
   left: 60%;
   top: 210pt;
 }
+
 #ugly{
   display: none;
 }
@@ -267,14 +304,14 @@ tbody td:hover:before {
   display: block;
   /* float: left; */
   position: absolute;
-  top: 185pt;
+  top: 300pt;
   left:-100pt;
   transform: scale(0.65);
 }
 #all{
   display: block;
   position: absolute;
-  top: 250pt;
+  top: 300pt;
   left: 46%;
   transform: scale(0.9);
 
