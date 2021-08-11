@@ -2,8 +2,15 @@
 <html>
 
 <head>
+
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 	<link rel="stylesheet" href="../static/index_view.css" />
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+		google.charts.load('current', {
+				packages: ['corechart']
+		});
+</script>
 	<header id='header'>
 		<nav class="navbar navbar-expand-lg navbar-light bg-light"  >
 			<div class="container-fluid" >
@@ -49,6 +56,12 @@
 <a href="{{ url_for("sign_up") }}">Sign up  </a>
 <a href="{{ url_for("sign_in") }}">  Sign in</a>
 </div> -->
+	 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', {
+            packages: ['corechart']
+        });
+    </script>
 
 </head>
 
@@ -86,6 +99,7 @@
 		<!-- </div> -->
 	</form>
 
+<!-- <div class="tables"> -->
 	<div class="containertable" id = 'all'>
 		All:
 		<table>
@@ -119,29 +133,57 @@
 		</table>
 	</div>
 
-	<form class="d-flex" >
 
-					<button id = 'Purchase'><input type="submit" value='Purchase' /id = 'ugly' class="search">Purchase</button>
+<!-- create flight -->
+	<form class="d-flex" action="/sign_in/staff_home" method="POST">
 
-		<div class="form__group field"  id='airline'>
-		<input type="input" class="form__field" placeholder="Airline:"  list="list3"  autocomplete="off" name="to" required />
-		<label for="from" class="form__label">Airline:</label>
-		<datalist id="list3">
-			{% for i in airlines %}
-			<option>{{ i }}</option>
-			{% endfor %}
-		</datalist>
+					<button id = 'Purchase'><input type="submit" value='Create Flight' /id = 'ugly' class="search">Create Flight</button>
+
+		<div class="form__group field"  id='Customer'>
+		<input type="input" class="form__field" placeholder="Flight num:" autocomplete="on" name="flight_c" required />
+		<label for="from" class="form__label">Flight num:</label>
 	</div>
 
-	<div class="form__group field"  id='flight_num'>
-		<input type="input" class="form__field" placeholder="Flight Number:"  list="list2"  autocomplete="off" name="to" required />
-		<label for="from" class="form__label">Flight Number:</label>
-		<datalist id="list4">
-			{% for i in flight_num %}
-			<option>{{ i }}</option>
-			{% endfor %}
-		</datalist>
+	<div class="form__group field"  id='price'>
+		<input type="input" class="form__field" placeholder="Price"  autocomplete="on" name="price" required />
+		<label for="from" class="form__label">Price: </label>
 	</div>
+
+	<div class="form__group field" id='depdate'>
+		<input type="date" class="form__field" placeholder="" name="depdate" required />
+		<label for="from" class="form__label">Departure_time:</label>
+		</div>
+
+		<div class="form__group field" id='arrdate'>
+			<input type="date" class="form__field" placeholder="" name="arrdate" required />
+			<label for="from" class="form__label">Arrival_time:</label>
+			</div>
+
+			<div class="form__group field" id='dep_c'>
+				<input type="input" class="form__field" placeholder="Departure"  list="list1"  autocomplete="off" name="depplace" required />
+				<label for="from" class="form__label">Departure</label>
+				<datalist id="list1">
+					{% for i in departure_city %}
+					<option>{{ i }}</option>
+					{% endfor %}
+				</datalist>
+			</div>
+			<!--			To City:<br>-->
+			<div class="form__group field"  id='arr_c'>
+				<input type="input" class="form__field" placeholder="Arrival"  list="list2"  autocomplete="off" name="arrplace" required />
+				<label for="from" class="form__label">Arrival</label>
+			<datalist id="list2">
+				{% for i in arrival_city %}
+				<option>{{ i }}</option>
+				{% endfor %}
+			</datalist>
+				</div>
+
+				<div class="form__group field"  id='plane'>
+				<input type="input" class="form__field" placeholder="Plane:" autocomplete="on" name="plane" required />
+				<label for="from" class="form__label">Plane:</label>
+			</div>
+
 	</form>
 
 	<!--<default view of upcoming schedule>-->
@@ -179,8 +221,36 @@
 	</div>
 
 
+<!-- diagram -->
+	{% if data_list %}
+	{% set d = data_list %}
 
 
+	    <div id="container" style="width: 550px; height: 400px; margin: 0 auto; display:block; background:transparent; position:absolute; left:25pt; top:500pt;"></div>
+	    <script language="JavaScript">
+	        function drawChart() {
+	            var data = google.visualization.arrayToDataTable({{data_list|safe}})
+	            var options = {
+	                title: 'Page visit per year',
+	                isStacked: true,
+									    // backgroundColor: '#E4E4E4',
+									is3D: true,
+									backgroundColor: {
+        fill: '#FF0000',
+        fillOpacity: 0
+      },
+	            };
+	            /Instantiate and draw the chart.*/
+	            var chart = new google.visualization.BarChart(document.getElementById('container'));
+	            chart.draw(data, options);
+	        }
+	        google.charts.setOnLoadCallback(drawChart);
+	    </script>
+	{% endif %}
+
+<!-- <div class="commission"> Total commission(Month):{{total_month}} <br>
+	Average commission(Month): {{avg_month}} <br> Total commission(Year):{{total_year}} <br>
+		Average commission(Year): {{avg_year}}</div> -->
 
 
 

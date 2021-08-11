@@ -241,6 +241,7 @@ def customer_home():
 def agent_home():
     session['signin'] = query.sign_in_check(conn, session['email'],session["password"], 'booking_agent','')
     session["user_type"] = 'booking_agent'
+    d = query.get_top_customer_number(conn,session)
     if not session["signin"] and request.method == 'GET':
         session["error"] = 'Invalid username or password, please try again.'
         return redirect(url_for("sign_in"))
@@ -248,8 +249,10 @@ def agent_home():
         data_dic = query.public_view(conn)
         locations = query.get_locations(conn)
         purchased_flight = query.get_purchased_flight(conn, session)
-        total_month = query.view_commission_month(conn, session)[0][0:]
+        total_month = query.view_commission_month(conn, session)[0]
         avg_month = query.view_commission_month(conn, session)[1]
+        total_year = query.view_commission_month(conn, session)[2]
+        avg_year = query.view_commission_month(conn, session)[3]
         return render_template('homepage_booking_agent.html',
                                # same results as
                                departure_city=locations['departure_loc'],
@@ -257,8 +260,10 @@ def agent_home():
                                all=data_dic,
                                purchased=purchased_flight,
                                total_month = total_month,
-                               avg_month = avg_month
-        )
+                               avg_month = avg_month,
+                               total_year= total_year,
+                               avg_year=avg_year,
+                               date_list = d)
 
 
 @app.route("/sign_in/staff_home", methods=["POST", "GET"])
@@ -270,7 +275,34 @@ def staff_home():
         session["error"] = 'Invalid username or password, please try again.'
         return redirect(url_for("sign_in"))
     elif session["signin"] and request.method == "GET":
-        return render_template("public_view.html")
+        data_dic = query.public_view(conn)
+        locations = query.get_locations(conn)
+        purchased_flight = query.get_purchased_flight(conn, session)
+        return render_template("homepage_staff.html",
+                               departure_city=locations['departure_loc'],
+                               arrival_city=locations['arrival_loc'],
+                               all=data_dic,
+                               purchased=purchased_flight,
+                               error = session.get('createflighterror')
+                               )
+    elif session["signin"] and request.method == "POST":
+        create_para = {
+            'flight_num': request.form.get("flight_c"),
+            'price': request.form.get('price'),
+            'departure_time': request.form.get("depdate"),
+            'arrival_time': request.form.get('arrdate'),
+            'departure': request.form.get('depplace'),
+            'arrival': request.form.get('arrplace'),
+            'plane': request.form.get('plane')
+        }
+        print(create_para)
+        if query.create_flight(conn, session, create_para['flight_num'], create_para["price"], create_para["departure_time"],create_para['arrival_time'],create_para['departure'][-3:], create_para['arrival'][-3:], create_para['plane']):
+            return redirect(url_for('staff_home'))
+        else:
+            session['createflighterror'] = 'Create Flight failed'
+            return redirect(url_for("staff_home"))
+
+
 
 
 @app.route("/sign_out", methods = ['POST','GET'])

@@ -187,7 +187,7 @@ def getting_past_month_period(year,month,day):
 # print(getting_past_month_period('2021','8','10'))
 
 def getting_past_year_period(year,month,day):
-    start = '%s 00:00:00'%(formatting_date(str(int(month)-1),month,day))
+    start = '%s 00:00:00'%(formatting_date(str(int(year)-1),month,day))
     end = '%s 23:59:59'%(formatting_date(year,month,day))
     return start, end
 # print(getting_past_year_period(getting_date()))
@@ -391,8 +391,36 @@ def view_commission_month(conn, session):
     data = cursor.fetchall()
     total = data[0]['total']
     avg = data[0]['avg']
-    print(total, avg)
-    return total, avg
+    query1 = 'SELECT SUM(flight.price)*0.1 as total, SUM(flight.price)*0.1/COUNT(purchases.ticket_id) as avg, COUNT(purchases.ticket_id) AS num ' \
+            'FROM flight, ticket, purchases ' \
+            'WHERE flight.flight_num = ticket.flight_num AND purchases.ticket_id = ticket.ticket_id ' \
+            'AND ticket.ticket_id in (select ticket_id ' \
+            'from purchases ' \
+            'where booking_agent_email = \'%s\' ' \
+            'and purchase_date between \'%s\' and \'%s\');' % (session["email"], getting_past_year_period(getting_date()[0], getting_date()[1], getting_date()[2])[0],getting_past_year_period(getting_date()[0], getting_date()[1], getting_date()[2])[1])
+    cursor1 = conn.cursor()
+    cursor1.execute(query1)
+    data1 = cursor1.fetchall()
+    total1 = data1[0]['total']
+    avg1 = data1[0]['avg']
+    return total, avg, total1, avg1
+
+def get_top_customer_number(conn, session):
+    print(getting_past_month_period(getting_date()[0],getting_date()[1],getting_date()[2])[0],  getting_past_month_period(getting_date()[0],getting_date()[1],getting_date()[2])[1])
+    query = 'SELECT customer_email, count(ticket_id) as tot_number FROM purchases ' \
+            'WHERE booking_agent_email = \'%s\' AND purchase_date between \'%s\' and \'%s\' ' \
+            'GROUP BY booking_agent_email ' \
+            'ORDER BY tot_number DESC limit 5;' %(session['email'], getting_past_month_period(getting_date()[0], getting_date()[1], getting_date()[2])[0],  getting_past_month_period(getting_date()[0],getting_date()[1],getting_date()[2])[1])
+    print(query)
+    cursor = conn.cursor()
+    cursor.execute(query)
+    data = cursor.fetchall()
+    data_list = [['Customer Email','# Amount']]
+    for i in range(len(data)):
+        data_list.append([data[i]['customer_email'],data[i]['tot_number']])
+    cursor.close()
+    print(data_list)
+    return data_list
 
 
 # staff
@@ -411,6 +439,23 @@ def get_top5_number(conn):
     cursor.close()
     print(data_list)
     return data_list
+
+def create_flight(conn, session, flight_num, price, departure_time, arrival_time,departure, arrival, plane):
+    success = False
+
+    #insert into flight
+    cursor = conn.cursor()
+    query = 'insert into flight values' \
+            '(\'%s\',\'%s\',\'%s\',\'%s\',\'%s\',\'%s\',\'%s\',\'Upcoming\',\'%s\')' % (session['airline_name'], flight_num,  departure, arrival, departure_time, arrival_time, price, plane)
+    print(query)
+    cursor.execute(query)
+    conn.commit()
+    cursor.close()
+
+    success = True
+    return success
+
+def change_flight_status(conn, session, flight_num):
 
 
 
