@@ -484,7 +484,7 @@ def create_flight(conn, session, flight_num, price, departure_time, arrival_time
     return success
 
 def change_flight_status(conn, session, flight_num):
-
+    pass
 
 
 # End of homepage utility function
