@@ -62,6 +62,12 @@ font-weight: 400;
   position: absolute;
   left: 30%;
   top: 140pt;
+  width: 100pt;
+}
+#flight_num1{
+  position: absolute;
+  left: 30%;
+  top: 140pt;
   width: 150pt;
 }
 #Purchase{
@@ -72,7 +78,6 @@ font-weight: 400;
   width: 150pt;
   left: 45%;
   top: 200pt;
-
 }
 #price{
   position: absolute;
@@ -110,6 +115,26 @@ font-weight: 400;
   left: 58%;
   top: 140pt;
 }
+#status{
+  position: absolute;
+  width: 85pt;
+  left: 5%;
+  top: 140pt;
+}
+#planeid{
+  position: absolute;
+  width: 100pt;
+  left: 30%;
+  top: 200pt;
+}
+#seats{
+  position: absolute;
+  width: 85pt;
+  left: 70%;
+  top: 150pt;
+}
+
+
 #search{
   position: absolute;
   left: 60%;
@@ -304,18 +329,19 @@ tbody td:hover:before {
   display: block;
   /* float: left; */
   position: absolute;
-  top: 300pt;
+  top: 285pt;
   left:-100pt;
   transform: scale(0.65);
 }
 #all{
   display: block;
   position: absolute;
-  top: 300pt;
+  top: 350pt;
   left: 46%;
   transform: scale(0.9);
 
 }
+
 /* .tables{
   display: block;
   top: 1000pt;

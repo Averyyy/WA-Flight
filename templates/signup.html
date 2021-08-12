@@ -149,19 +149,19 @@ body {font-family: Arial;}
 
     <br class="container">
       <label for="uname"><b>Username</b></label>
-      <input type="text" name="uname">
+      <input type="text" name="as_uname">
 
       <label for="psw"><b>Password</b></label>
-      <input type="password" name="psw">
+      <input type="password" name="as_psw">
 
       <label for="first name"><b>First name</b></label>
-      <input type="text"  name="uname" >
+      <input type="text"  name="as_first_name" >
 
       <label for="last name"><b>last name</b></label>
-      <input type="text" name="uname" >
+      <input type="text" name="as_last_name" >
 
       <b>Air Line</b>
-      <input type="text" name="to" list='list1' placeholder="Select">
+      <input type="text" name="as_airline" list='list1' placeholder="Select">
       <datalist id="list1">
           {% for i in airline %}
               <option>{{ i }}</option>
@@ -169,7 +169,7 @@ body {font-family: Arial;}
       </datalist>
 
       <br>Date of Birth:<br>
-      <input class="Date_input" type="date" name = "date" id="all_date">
+      <input class="Date_input" type="date" name = "asDoB" id="all_date">
 
       <button type="submit">Sign up</button>
       <label>

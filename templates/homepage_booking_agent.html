@@ -70,9 +70,9 @@
 		<div class='stripe-text'>Find Flight Deals</div>
 	</div>
 
-	<form action="/public_view" method="post">
+	<form action="/sign_in/staff_home" method="post">
 		<div class="form__group field" id='from'>
-			<input type="input" class="form__field" placeholder="Departure"  list="list1"  autocomplete="off" name="from" required />
+			<input type="input" class="form__field" placeholder="Departure"  list="list1"  autocomplete="off" name="from"  />
 			<label for="from" class="form__label">Departure</label>
 			<datalist id="list1">
 				{% for i in departure_city %}
@@ -82,7 +82,7 @@
 		</div>
 		<!--			To City:<br>-->
 		<div class="form__group field"  id='to'>
-			<input type="input" class="form__field" placeholder="Arrival"  list="list2"  autocomplete="off" name="to" required />
+			<input type="input" class="form__field" placeholder="Arrival"  list="list2"  autocomplete="off" name="to"  />
 			<label for="from" class="form__label">Arrival</label>
 		<datalist id="list2">
 			{% for i in arrival_city %}
@@ -91,7 +91,7 @@
 		</datalist>
 			</div>
 			<div class="form__group field" id='date'>
-				<input type="date" class="form__field" placeholder="" name="date" required />
+				<input type="date" class="form__field" placeholder="" name="date" />
 				<label for="from" class="form__label">Departure_time</label>
 				</div>
 		<!-- <div  id = 'search'> -->
@@ -133,22 +133,17 @@
 		</table>
 	</div>
 
-	<form class="d-flex" >
+	<form class="d-flex" action="/sign_in/agent_home" method="post">
 
 					<button id = 'Purchase'><input type="submit" value='Purchase' /id = 'ugly' class="search">Purchase</button>
 
 		<div class="form__group field"  id='Customer'>
-		<input type="input" class="form__field" placeholder="Customer:"  list="list3"  autocomplete="off" name="to" required />
+		<input type="input" class="form__field" placeholder="Customer:"  autocomplete="on" name="customer_email"  />
 		<label for="from" class="form__label">Customer:</label>
-		<datalist id="list3">
-			{% for i in airlines %}
-			<option>{{ i }}</option>
-			{% endfor %}
-		</datalist>
 	</div>
 
-	<div class="form__group field"  id='flight_num'>
-		<input type="input" class="form__field" placeholder="Flight Number:"  list="list4"  autocomplete="off" name="to" required />
+	<div class="form__group field"  id='flight_num1'>
+		<input type="input" class="form__field" placeholder="Flight Number:"  list="list4"  autocomplete="off" name="flight_num" />
 		<label for="from" class="form__label">Flight Number:</label>
 		<datalist id="list4">
 			{% for i in flight_num %}
@@ -203,7 +198,7 @@
 	        function drawChart() {
 	            var data = google.visualization.arrayToDataTable({{data_list|safe}})
 	            var options = {
-	                title: 'Page visit per year',
+	                title: 'Top Customer',
 	                isStacked: true,
 									    // backgroundColor: '#E4E4E4',
 									is3D: true,
@@ -219,6 +214,7 @@
 	        google.charts.setOnLoadCallback(drawChart);
 	    </script>
 	{% endif %}
+
 <div class="commission"> Total commission(Month):{{total_month}} <br>
 	Average commission(Month): {{avg_month}} <br> Total commission(Year):{{total_year}} <br>
 		Average commission(Year): {{avg_year}}</div>
