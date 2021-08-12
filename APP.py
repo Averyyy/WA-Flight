@@ -222,7 +222,8 @@ def customer_home():
 def agent_home():
     session['signin'] = query.sign_in_check(conn, session['email'],session["password"], 'booking_agent','')
     session["user_type"] = 'booking_agent'
-    d = query.get_top_customer_number(conn,session)
+    da = query.get_top_customer_number(conn,session)
+    print('datalist: ', da)
     locations = query.get_locations(conn)
     total_month = query.view_commission_month(conn, session)[0]
     avg_month = query.view_commission_month(conn, session)[1]
@@ -244,7 +245,7 @@ def agent_home():
                                avg_month = avg_month,
                                total_year= total_year,
                                avg_year=avg_year,
-                               date_list = d)
+                               date_list1 = da)
 
     elif request.method == 'POST':
         html_get = {'from': request.form.get('from'),
@@ -313,7 +314,7 @@ def staff_home():
             'seats' : request.form.get('seats')
         }
 
-        if create_para['flight_num']:
+        if create_para['price']:
             if query.create_flight(conn, session, create_para['flight_num'], create_para["price"], create_para["departure_time"],create_para['arrival_time'],create_para['departure'][-3:], create_para['arrival'][-3:], create_para['plane']):
                 return redirect(url_for('staff_home'))
             else:

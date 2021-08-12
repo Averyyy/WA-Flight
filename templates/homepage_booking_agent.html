@@ -189,31 +189,31 @@
 
 
 <!-- diagram -->
-	{% if data_list %}
-	{% set d = data_list %}
+{% if data_list1 %}
+{% set d = data_list1 %}
 
 
-	    <div id="container" style="width: 550px; height: 400px; margin: 0 auto; display:block; background:transparent; position:absolute; left:25pt; top:500pt;"></div>
-	    <script language="JavaScript">
-	        function drawChart() {
-	            var data = google.visualization.arrayToDataTable({{data_list|safe}})
-	            var options = {
-	                title: 'Top Customer',
-	                isStacked: true,
-									    // backgroundColor: '#E4E4E4',
-									is3D: true,
-									backgroundColor: {
-        fill: '#FF0000',
-        fillOpacity: 0
-      },
-	            };
-	            /Instantiate and draw the chart.*/
-	            var chart = new google.visualization.BarChart(document.getElementById('container'));
-	            chart.draw(data, options);
-	        }
-	        google.charts.setOnLoadCallback(drawChart);
-	    </script>
-	{% endif %}
+		<div id="container" style="width: 550px; height: 400px; margin: 0 auto; display:block; background:transparent; position:absolute; left:25pt; top:500pt;"></div>
+		<script language="JavaScript">
+				function drawChart() {
+						var data = google.visualization.arrayToDataTable({{data_list|safe}})
+						var options = {
+								title: 'Page visit per year',
+								isStacked: true,
+										// backgroundColor: '#E4E4E4',
+								is3D: true,
+								backgroundColor: {
+			fill: '#FF0000',
+			fillOpacity: 0
+		},
+						};
+						/Instantiate and draw the chart.*/
+						var chart = new google.visualization.BarChart(document.getElementById('container'));
+						chart.draw(data, options);
+				}
+				google.charts.setOnLoadCallback(drawChart);
+		</script>
+{% endif %}
 
 <div class="commission"> Total commission(Month):{{total_month}} <br>
 	Average commission(Month): {{avg_month}} <br> Total commission(Year):{{total_year}} <br>
