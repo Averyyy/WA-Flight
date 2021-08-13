@@ -1,5 +1,6 @@
 # WA-Flight
 Final project for Database
+[![Watch the video](https://i.imgur.com/vKb2F1B.png)](https://youtu.be/L46pCk0sd7k)
 
 0. Before you read:
   This is a project wrote by Wendy and me and we only had about one week part time to finish it(with other things like learning and taking exams). Since that the time is very limited and we admit there are a lot that can be improved and we tried our best to add more functions and fix bugs. Anyways, Please enjoy reading! 
